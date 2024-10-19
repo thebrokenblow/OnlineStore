@@ -5,6 +5,13 @@ namespace OnlineShop.Application.ProductCategories.Queries.GetProductCategoryRan
 
 public class GetProductCategoryRangeQueryHandler(IRepositoryProductCategory repositoryProductCategory) : IRequestHandler<GetProductCategoryRangeQuery, ProductCategoryRangeVM>
 {
-    public async Task<ProductCategoryRangeVM> Handle(GetProductCategoryRangeQuery request, CancellationToken cancellationToken) =>
-        await repositoryProductCategory.GetRangeAsync(request.CountSkip, request.CountTake, cancellationToken);
+    public async Task<ProductCategoryRangeVM> Handle(GetProductCategoryRangeQuery request, CancellationToken cancellationToken)
+    {
+        var productCategories = await repositoryProductCategory.GetRangeAsync(request.CountSkip, request.CountTake, cancellationToken);
+
+        return new ProductCategoryRangeVM
+        {
+            ProductCategories = productCategories
+        };
+    }
 }

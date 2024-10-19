@@ -6,5 +6,5 @@ namespace OnlineShop.Application.ProductCategories.Commands.DeleteProductCategor
 public class DeleteProductCategoryCommandHandler(IRepositoryProductCategory repositoryProductCategory) : IRequestHandler<DeleteProductCategoryCommand>
 {
     public async Task Handle(DeleteProductCategoryCommand request, CancellationToken cancellationToken) =>
-        await repositoryProductCategory.DeleteAsync(request, cancellationToken);
+        await repositoryProductCategory.DeleteAsync(request.Id, cancellationToken);
 }
