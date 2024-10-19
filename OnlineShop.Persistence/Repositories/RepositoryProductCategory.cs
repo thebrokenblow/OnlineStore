@@ -3,6 +3,7 @@ using OnlineShop.Application.Repositories.Interfaces;
 using OnlineShop.Application.ProductCategories.Commands.CreateProductCategory;
 using OnlineShop.Application.ProductCategories.Commands.UpdateProductCategory;
 using Microsoft.EntityFrameworkCore;
+using OnlineShop.Application.Common.Exceptions;
 
 namespace OnlineShop.Persistence.Repositories;
 
@@ -30,17 +31,22 @@ public class RepositoryProductCategory(OnlineStoreDbContext context) : IReposito
     }
 
     public async Task<ProductCategory> GetByIdAsync(int id, CancellationToken cancellationToken) =>
-        await context.ProductCategories.SingleOrDefaultAsync(productCategory => productCategory.Id == id, cancellationToken) ?? 
-        throw new Exception();
+        await context.ProductCategories.SingleOrDefaultAsync(productCategory => productCategory.Id == id, cancellationToken) ??
+        throw new NotFoundException(nameof(ProductCategory), id);
 
     public Task<List<ProductCategory>> GetRangeAsync(int countSkip, int countTake, CancellationToken cancellationToken) =>
-        context.ProductCategories.Skip(countSkip).Take(countTake).ToListAsync(cancellationToken);
+        context.ProductCategories
+            .Skip(countSkip)
+            .Take(countTake)
+            .ToListAsync(cancellationToken);
 
-    public async Task UpdateAsync(UpdateProductCategoryCommand updateProductCategory, CancellationToken cancellationToken) =>
-        await context.ProductCategories
-        .Where(product => product.Id == updateProductCategory.Id)
-        .ExecuteUpdateAsync(s => s
-            .SetProperty(productCategory => productCategory.Name, updateProductCategory.Name)
-            .SetProperty(productCategory => productCategory.Description, updateProductCategory.Description), 
-                cancellationToken);
+    public async Task UpdateAsync(UpdateProductCategoryCommand updateProductCategory, CancellationToken cancellationToken)
+    {
+        var productCategory = await GetByIdAsync(updateProductCategory.Id, cancellationToken);
+
+        productCategory.Name = updateProductCategory.Name;
+        productCategory.Description = updateProductCategory.Description;
+
+        await context.SaveChangesAsync(cancellationToken);
+    }
 }

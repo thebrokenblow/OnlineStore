@@ -1,9 +1,14 @@
-﻿namespace OnlineShop.WebApi;
+﻿using OnlineShop.Application;
+using OnlineShop.Persistence;
+
+namespace OnlineShop.WebApi;
 
 public class Startup(IConfiguration configuration)
 {
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddApplication();
+        services.AddPersistence(configuration);
         services.AddControllers();
         services.AddSwaggerGen();
     }
