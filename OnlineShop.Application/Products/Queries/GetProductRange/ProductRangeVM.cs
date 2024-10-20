@@ -1,9 +1,6 @@
-﻿using MediatR;
-using OnlineShop.Domain;
-
-namespace OnlineShop.Application.Products.Queries.GetProductRange;
+﻿namespace OnlineShop.Application.Products.Queries.GetProductRange;
 
 public class ProductRangeVM
 {
-    public required List<Product> Products { get; set; }
+    public required List<GetProductVM> Products { get; set; }
 }

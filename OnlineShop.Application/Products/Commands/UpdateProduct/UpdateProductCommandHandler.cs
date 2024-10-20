@@ -3,11 +3,11 @@ using OnlineShop.Application.Repositories.Interfaces;
 
 namespace OnlineShop.Application.Products.Commands.UpdateProduct;
 
-public class UpdateProductCommandHandler(IRepositoryProduct repositoryProduct, IRepositoryProductCategory repositoryProductCategory) : IRequestHandler<UpdateProductCommand>
+public class UpdateProductCommandHandler(IRepositoryProduct repositoryProduct, IRepositoryProductCategory repositoryProductCategory) : IRequestHandler<UpdateProductCommand, int>
 {
-    public async Task Handle(UpdateProductCommand request, CancellationToken cancellationToken)
+    public async Task<int> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
-        var productCategory = await repositoryProductCategory.GetByIdAsync(request.Id, cancellationToken);
+        var productCategory = await repositoryProductCategory.GetByIdAsync(request.IdProductCategory, cancellationToken);
 
         var updateProductDto = new UpdateProductDto
         {
@@ -19,5 +19,7 @@ public class UpdateProductCommandHandler(IRepositoryProduct repositoryProduct, I
         };
 
         await repositoryProduct.UpdateAsync(updateProductDto, cancellationToken);
+
+        return request.Id;
     }
 }

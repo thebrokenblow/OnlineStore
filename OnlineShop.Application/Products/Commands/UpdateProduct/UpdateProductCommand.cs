@@ -2,7 +2,7 @@
 
 namespace OnlineShop.Application.Products.Commands.UpdateProduct;
 
-public class UpdateProductCommand : IRequest
+public class UpdateProductCommand : IRequest<int>
 {
     public required int Id { get; set; }
     public required string Name { get; set; }

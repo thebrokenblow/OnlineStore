@@ -1,5 +1,6 @@
 ﻿using OnlineShop.Application;
 using OnlineShop.Persistence;
+using OnlineShop.WebApi.Middleware;
 
 namespace OnlineShop.WebApi;
 
@@ -20,6 +21,7 @@ public class Startup(IConfiguration configuration)
             app.UseDeveloperExceptionPage();
         }
 
+        app.UseCustomExceptionHandler();
         app.UseRouting();
         app.UseHttpsRedirection();
         app.UseSwagger();
