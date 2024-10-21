@@ -29,3 +29,5 @@ git clone https://github.com/thebrokenblow/OnlineStore.git
    ![Миграция](http://url/to/img.png)
 
 8. Если миграция прошла успешно, то можно запускать проект нажав на F5 или F5 + Fn
+
+В приожении подключён Swagger для удбоства тестирования.
