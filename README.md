@@ -29,6 +29,7 @@
 ![OnlineShop.Persistence](https://github.com/thebrokenblow/OnlineStore/blob/master/photos/Console2.png)
 
 7. Ввести две команды Add-Migration<Название миграции> и Update-Database
+
    ![Миграция](https://github.com/thebrokenblow/OnlineStore/blob/master/photos/Migration.png)
 
 8. Если миграция прошла успешно, то можно запускать проект нажав на F5 или F5 + Fn
