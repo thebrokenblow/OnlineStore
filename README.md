@@ -16,7 +16,7 @@
 
 3. Далее запустить solution проекта
 
-4. Для миграции объектов в базу данных необходимо установить строку подключения DbConnection на вашу в файле appsettings.json проекта OnlineShop.WebApi
+4. Для миграции объектов в базу данных необходимо установить вашу строку подключения DbConnection в файле appsettings.json проекта OnlineShop.WebApi
 
 ![appsettings.json](https://github.com/thebrokenblow/OnlineStore/blob/master/photos/appsettings.png)
 
