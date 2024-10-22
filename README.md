@@ -28,7 +28,11 @@
 
 ![OnlineShop.Persistence](https://github.com/thebrokenblow/OnlineStore/blob/master/photos/Console2.png)
 
-7. Ввести две команды Add-Migration<Название миграции> и Update-Database
+7. Ввести две команды 
+```sh
+   Add-Migration<Название миграции>
+   Update-Database
+```
 
    ![Миграция](https://github.com/thebrokenblow/OnlineStore/blob/master/photos/Migration.png)
 
