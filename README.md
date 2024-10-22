@@ -30,7 +30,7 @@
 
 7. Ввести две команды 
 ```sh
-   Add-Migration<Название миграции>
+   Add-Migration <Название миграции>
    Update-Database
 ```
 
