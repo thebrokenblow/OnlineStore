@@ -16,10 +16,13 @@ public class AssemblyMappingProfile : Profile
                 i.GetGenericTypeDefinition() == typeof(IMapWith<>)))
             .ToList();
 
+        IMapWith<object> mapWith;
+        var nameMethodMapping = nameof(mapWith.Mapping);
+
         foreach (var type in types)
         {
             var instance = Activator.CreateInstance(type);
-            var methodInfo = type.GetMethod("Mapping");
+            var methodInfo = type.GetMethod(nameMethodMapping);
             methodInfo?.Invoke(instance, [this]);
         }
     }

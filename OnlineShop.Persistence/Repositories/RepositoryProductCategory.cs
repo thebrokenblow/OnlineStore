@@ -1,9 +1,9 @@
-﻿using OnlineShop.Domain;
-using OnlineShop.Application.Repositories.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using OnlineShop.Application.Common.Exceptions;
 using OnlineShop.Application.ProductCategories.Commands.CreateProductCategory;
 using OnlineShop.Application.ProductCategories.Commands.UpdateProductCategory;
-using Microsoft.EntityFrameworkCore;
-using OnlineShop.Application.Common.Exceptions;
+using OnlineShop.Application.Repositories.Interfaces;
+using OnlineShop.Domain;
 
 namespace OnlineShop.Persistence.Repositories;
 
@@ -31,7 +31,8 @@ public class RepositoryProductCategory(OnlineStoreDbContext context) : IReposito
     }
 
     public async Task<ProductCategory> GetByIdAsync(int id, CancellationToken cancellationToken) =>
-        await context.ProductCategories.SingleOrDefaultAsync(productCategory => productCategory.Id == id, cancellationToken) ??
+        await context.ProductCategories.SingleOrDefaultAsync(
+            productCategory => productCategory.Id == id, cancellationToken) ??
         throw new NotFoundException(nameof(ProductCategory), id);
 
     public Task<List<ProductCategory>> GetRangeAsync(int countSkip, int countTake, CancellationToken cancellationToken) =>
@@ -44,9 +45,30 @@ public class RepositoryProductCategory(OnlineStoreDbContext context) : IReposito
     {
         var productCategory = await GetByIdAsync(updateProductCategory.Id, cancellationToken);
 
-        productCategory.Name = updateProductCategory.Name;
-        productCategory.Description = updateProductCategory.Description;
+        try
+        {
+            productCategory.Name = updateProductCategory.Name;
+            productCategory.Description = updateProductCategory.Description;
 
-        await context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            var isProductCategoryExists = await IsExistsAsync(updateProductCategory.Id, cancellationToken);
+
+            if (!isProductCategoryExists)
+            {
+                throw new NotFoundException(nameof(ProductCategory), updateProductCategory.Id);
+            }
+            else
+            {
+                throw;
+            }
+        }
     }
+
+    public async Task<bool> IsExistsAsync(int id, CancellationToken cancellationToken) =>
+        await context.ProductCategories.AnyAsync(
+            productCategory => productCategory.Id == id, 
+            cancellationToken);
 }

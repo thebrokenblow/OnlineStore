@@ -1,19 +1,17 @@
-﻿using OnlineShop.Domain;
-using OnlineShop.Persistence.EntityTypeConfigurations;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using OnlineShop.Domain;
+using OnlineShop.Persistence.Extensions;
 
 namespace OnlineShop.Persistence;
 
 public class OnlineStoreDbContext(DbContextOptions<OnlineStoreDbContext> options) : DbContext(options)
 {
-    public DbSet<Product> Product { get; set; }
-    public DbSet<ProductCategory> ProductCategories { get; set; }
+    public required DbSet<Product> Product { get; set; }
+    public required DbSet<ProductCategory> ProductCategories { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration());
-        modelBuilder.ApplyConfiguration(new ProductConfiguration());
-
+        modelBuilder.ApplyAllConfigurations();
         base.OnModelCreating(modelBuilder);
     }
 }
