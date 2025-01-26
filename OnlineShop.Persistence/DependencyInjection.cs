@@ -9,12 +9,14 @@ namespace OnlineShop.Persistence;
 public static class DependencyInjection
 {
     private const string keyConnectionString = "DbConnection";
+
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration[keyConnectionString];
+
         services.AddDbContext<OnlineStoreDbContext>(options =>
         {
-            options.UseSqlServer(connectionString);
+            options.UseNpgsql(connectionString);
         });
 
         services.AddScoped<IRepositoryProduct, RepositoryProduct>();

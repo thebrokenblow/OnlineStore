@@ -9,6 +9,9 @@ public class ProductCategoryConfiguration : IEntityTypeConfiguration<ProductCate
     public void Configure(EntityTypeBuilder<ProductCategory> builder)
     {
         builder
+            .ToTable("product_categories");
+
+        builder
             .HasKey(productCategory => productCategory.Id);
 
         builder
@@ -16,13 +19,19 @@ public class ProductCategoryConfiguration : IEntityTypeConfiguration<ProductCate
             .IsUnique();
 
         builder
+            .Property(productCategory => productCategory.Id)
+            .HasColumnName("id");
+
+        builder
             .Property(productCategory => productCategory.Name)
+            .HasColumnName("name")
             .HasMaxLength(250)
             .IsRequired();
 
         builder
             .Property(productCategory => productCategory.Description)
+            .HasColumnName("description")
             .HasMaxLength(1024)
-            .IsRequired();
+            .IsRequired(false);
     }
 }

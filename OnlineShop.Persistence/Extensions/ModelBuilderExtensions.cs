@@ -11,8 +11,8 @@ public static class ModelBuilderExtensions
             .GetExecutingAssembly()
             .GetTypes()
             .Where(type => type.GetInterfaces()
-            .Any(gi => gi.IsGenericType &&
-                       gi.GetGenericTypeDefinition() == typeof(IEntityTypeConfiguration<>)))
+            .Any(type => type.IsGenericType &&
+                       type.GetGenericTypeDefinition() == typeof(IEntityTypeConfiguration<>)))
             .ToList();
 
         var configurations = typesToRegister.Select(type =>

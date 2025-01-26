@@ -1,11 +1,12 @@
-﻿namespace OnlineShop.Domain;
+﻿using OnlineShop.Domain;
 
-public class Product
+namespace OnlineShop.Application.Products.Commands.ProductUpdate;
+
+public class UpdateProductDto
 {
-    public int Id { get; set; }
+    public required int Id { get; set; }
     public required string Name { get; set; }
     public required string Description { get; set; }
     public required decimal Price { get; set; }
-    public int ProductCategoryId { get; set; }
     public required ProductCategory ProductCategory { get; set; }
 }

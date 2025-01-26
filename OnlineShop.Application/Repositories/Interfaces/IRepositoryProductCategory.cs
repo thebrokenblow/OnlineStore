@@ -1,15 +1,18 @@
-﻿using OnlineShop.Application.ProductCategories.Commands.CreateProductCategory;
-using OnlineShop.Application.ProductCategories.Commands.UpdateProductCategory;
+﻿using OnlineShop.Application.ProductCategories.Commands.ProductCategoryUpdate;
+using OnlineShop.Application.ProductCategories.Queries.GetAllProductCategory;
+using OnlineShop.Application.ProductCategories.Queries.GetDetailsProductCategory;
+using OnlineShop.Application.ProductCategories.Queries.GetRangeProductCategory;
 using OnlineShop.Domain;
 
 namespace OnlineShop.Application.Repositories.Interfaces;
 
 public interface IRepositoryProductCategory
 {
-    Task<int> AddAsync(CreateProductCategoryCommand createProductCategory, CancellationToken cancellationToken = default);
+    Task<int> AddAsync(ProductCategory productCategory, CancellationToken cancellationToken = default);
     Task DeleteAsync(int id, CancellationToken cancellationToken = default);
-    Task UpdateAsync(UpdateProductCategoryCommand updateProductCategory, CancellationToken cancellationToken = default);
-    Task<List<ProductCategory>> GetRangeAsync(int countSkip, int countTake, CancellationToken cancellationToken = default);
-    Task<ProductCategory> GetByIdAsync(int id, CancellationToken cancellationToken = default);
-    Task<bool> IsExistsAsync(int id, CancellationToken cancellationToken = default);
+    Task UpdateAsync(UpdateProductCategoryDto updateProductCategory, CancellationToken cancellationToken = default);
+    Task<GetDetailsProductCategoryDto> GetDetailsAsync(int id, CancellationToken cancellationToken = default);
+    Task<List<GetAllProductCategoryDto>> GetAllAsync(CancellationToken cancellationToken = default);
+    Task<List<GetRangeProductCategoryDto>> GetRangeAsync(int countSkip, int countTake, CancellationToken cancellationToken = default);
+    Task<ProductCategory> GetByIdAsync(int idProductCategory, CancellationToken cancellationToken);
 }
