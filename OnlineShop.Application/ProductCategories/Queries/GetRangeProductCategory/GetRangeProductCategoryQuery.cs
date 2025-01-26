@@ -4,6 +4,6 @@ namespace OnlineShop.Application.ProductCategories.Queries.GetRangeProductCatego
 
 public class GetRangeProductCategoryQuery : IRequest<List<GetRangeProductCategoryDto>>
 {
-    public int CountSkip { get; set; }
-    public int CountTake { get; set; }
+    public required int CountSkip { get; set; }
+    public required int CountTake { get; set; }
 }

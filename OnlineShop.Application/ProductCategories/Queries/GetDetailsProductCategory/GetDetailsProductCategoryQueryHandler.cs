@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using OnlineShop.Application.Repositories.Interfaces;
-using OnlineShop.Domain;
 
 namespace OnlineShop.Application.ProductCategories.Queries.GetDetailsProductCategory;
 

@@ -6,8 +6,8 @@ namespace OnlineShop.Persistence;
 
 public class OnlineStoreDbContext(DbContextOptions<OnlineStoreDbContext> options) : DbContext(options)
 {
-    public required DbSet<Product> Product { get; set; }
-    public required DbSet<ProductCategory> ProductCategories { get; set; }
+    public DbSet<Product> Product { get; set; }
+    public DbSet<ProductCategory> ProductCategories { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
