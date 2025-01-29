@@ -1,23 +1,24 @@
 ﻿using OnlineShop.Application.Common.Exceptions;
 using OnlineShop.Application.ProductCategories.Commands.ProductCategoryDeletion;
-using OnlineStore.UnitTests.Common.CommonProductCategory;
+using OnlineShop.Application.Products.Commands.ProductDeletion;
+using OnlineStore.UnitTests.Common.CommonProduct;
 
-namespace OnlineStore.UnitTests.ProductCategories.Commands;
+namespace OnlineStore.UnitTests.Products.Commands;
 
-public class DeleteProductCategoryCommandHandlerTest : TestProductCategoryBase
+public class DeleteProductCommandHandlerTest : TestProductBase
 {
     [Fact]
-    public async Task DeleteProductCategoryCommandHandler_Success()
+    public async Task DeleteProductCommandHandler_Success()
     {
         // Arrange
 
-        var handler = new DeleteProductCategoryCommandHandler(_productCategoryRepository);
+        var handler = new DeleteProductCommandHandler(_repositoryProduct);
 
         // Act
 
-        var deleteProductCategoryCommand = new DeleteProductCategoryCommand
+        var deleteProductCategoryCommand = new DeleteProductCommand
         {
-            Id = _productCategoryContextFactory.ProductCategoryIdForDelete
+            Id = _factoryProductCategoryContext.IdProductForDelete
         };
 
         await handler.Handle(deleteProductCategoryCommand, CancellationToken.None);
@@ -25,17 +26,17 @@ public class DeleteProductCategoryCommandHandlerTest : TestProductCategoryBase
         // Assert
 
         var productCategory = _context.ProductCategories.SingleOrDefault(productCategory =>
-                                        productCategory.Id == _productCategoryContextFactory.ProductCategoryIdForDelete);
+                                        productCategory.Id == _factoryProductCategoryContext.IdProductForDelete);
 
         Assert.Null(productCategory);
     }
 
     [Fact]
-    public async Task DeleteProductCategoryCommandHandler_FailOnWrongId()
+    public async Task DeleteProductCommandHandler_FailOnWrongId()
     {
         // Arrange
 
-        var handler = new DeleteProductCategoryCommandHandler(_productCategoryRepository);
+        var handler = new DeleteProductCategoryCommandHandler(_repositoryProductCategory);
 
         //Генерация случайного идентификатора
 

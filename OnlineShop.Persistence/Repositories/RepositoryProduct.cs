@@ -52,15 +52,18 @@ public class RepositoryProduct(OnlineStoreDbContext context) : IRepositoryProduc
                         .AsNoTracking()
                         .ToListAsync(cancellationToken);
 
-    public async Task<GetDetailsProductDto> GetDetailsByIdAsync(int id, CancellationToken cancellationToken) =>
-        await context.Products
-                   .Select(product => CreateDetailsProductDto(product))
-                   .Include(product => product.ProductCategory)
-                   .AsNoTracking()
-                   .SingleOrDefaultAsync(
-                       product => product.Id == id,
-                   cancellationToken)
-                       ?? throw new NotFoundException(nameof(Product), id);
+    public async Task<GetDetailsProductDto> GetDetailsByIdAsync(int id, CancellationToken cancellationToken)
+    {
+        var product = await context.Products
+                                   .Include(product => product.ProductCategory)
+                                   .AsNoTracking()
+                                   .SingleOrDefaultAsync(product => product.Id == id, cancellationToken) ?? throw new NotFoundException(nameof(Product), id);
+        
+        var detailsProductDto = CreateDetailsProductDto(product);
+
+        return detailsProductDto;
+    }
+
 
     private async Task<Product> GetByIdTrackingAsync(int id, CancellationToken cancellationToken) =>
         await context.Products.SingleOrDefaultAsync(
@@ -87,7 +90,7 @@ public class RepositoryProduct(OnlineStoreDbContext context) : IRepositoryProduc
         {
             Id = product.ProductCategory.Id,
             Name = product.ProductCategory.Name,
-            Description = product.Description,
+            Description = product.ProductCategory.Description,
         };
 
         var detailsProductDto = new GetDetailsProductDto

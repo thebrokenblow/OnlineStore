@@ -1,24 +1,21 @@
 ﻿using OnlineShop.Application.Common.Exceptions;
 using OnlineShop.Application.ProductCategories.Queries.GetDetailsProductCategory;
-using OnlineShop.Persistence.Repositories;
-using OnlineStore.UnitTests.Common;
+using OnlineStore.UnitTests.Common.CommonProductCategory;
 
 namespace OnlineStore.UnitTests.ProductCategories.Queries;
 
-public class GetDetailsProductCategoryQueryHandlerTest
+public class GetDetailsProductCategoryQueryHandlerTest : TestProductCategoryBase
 {
     [Fact]
     public async Task GetDetailsProductCategoryQueryHandler_Success()
     {
         // Arrange
 
-        var context = ProductCategoryContextFactory.Create();
-        var repository = new RepositoryProductCategory(context);
-        var handler = new GetDetailsProductCategoryQueryHandler(repository);
+        var handler = new GetDetailsProductCategoryQueryHandler(_productCategoryRepository);
 
         var getDetailsProductCategoryQuery = new GetDetailsProductCategoryQuery
         {
-            Id = ProductCategoryContextFactory.ProductCategoryIdForDetails,
+            Id = _productCategoryContextFactory.ProductCategoryIdForDetails,
         };
 
         // Act
@@ -29,8 +26,8 @@ public class GetDetailsProductCategoryQueryHandlerTest
 
         // Assert
 
-        Assert.Equal("Category3", result.Name);
-        Assert.Equal("Description for Category3", result.Description);
+        Assert.Equal(_productCategoryContextFactory.ProductCategoryName3, result.Name);
+        Assert.Equal(_productCategoryContextFactory.ProductCategoryDescription3, result.Description);
     }
 
 
@@ -39,15 +36,13 @@ public class GetDetailsProductCategoryQueryHandlerTest
     {
         // Arrange
 
-        var context = ProductCategoryContextFactory.Create();
-        var repository = new RepositoryProductCategory(context);
-        var handler = new GetDetailsProductCategoryQueryHandler(repository);
+        var handler = new GetDetailsProductCategoryQueryHandler(_productCategoryRepository);
 
         //Генерация случайного идентификатора
 
         var getDetailsProductCategoryQuery = new GetDetailsProductCategoryQuery
         {
-            Id = new Random().Next(context.ProductCategories.Count(), 1000),
+            Id = new Random().Next(_context.ProductCategories.Count(), 1000),
         };
 
         // Act

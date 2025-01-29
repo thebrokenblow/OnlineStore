@@ -1,10 +1,9 @@
 ﻿using OnlineShop.Application.ProductCategories.Queries.GetRangeProductCategory;
-using OnlineShop.Persistence.Repositories;
-using OnlineStore.UnitTests.Common;
+using OnlineStore.UnitTests.Common.CommonProductCategory;
 
 namespace OnlineStore.UnitTests.ProductCategories.Queries;
 
-public class GetRangeProductCategoryQueryHandlerTest
+public class GetRangeProductCategoryQueryHandlerTest : TestProductCategoryBase
 {
     [Theory]
     [InlineData(0, 10, 10)]
@@ -15,9 +14,7 @@ public class GetRangeProductCategoryQueryHandlerTest
     {
         // Arrange
 
-        var context = ProductCategoryContextFactory.Create();
-        var repository = new RepositoryProductCategory(context);
-        var handler = new GetRangeProductCategoryQueryHandler(repository);
+        var handler = new GetRangeProductCategoryQueryHandler(_productCategoryRepository);
 
         var getRangeProductCategoryQuery = new GetRangeProductCategoryQuery
         {

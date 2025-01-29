@@ -1,19 +1,16 @@
 ﻿using OnlineShop.Application.ProductCategories.Queries.GetAllProductCategory;
-using OnlineShop.Persistence.Repositories;
-using OnlineStore.UnitTests.Common;
+using OnlineStore.UnitTests.Common.CommonProductCategory;
 
 namespace OnlineStore.UnitTests.ProductCategories.Queries;
 
-public class GetAllProductCategoryHandlerTest
+public class GetAllProductCategoryHandlerTest : TestProductCategoryBase
 {
     [Fact]
     public async Task GetAllProductCategoryQueryHandler_Success()
     {
         // Arrange
 
-        var context = ProductCategoryContextFactory.Create();
-        var repository = new RepositoryProductCategory(context);
-        var handler = new GetAllProductCategoryHandler(repository);
+        var handler = new GetAllProductCategoryHandler(_productCategoryRepository);
         var getAllProductCategoryQuery = new GetAllProductCategoryQuery();
 
         // Act

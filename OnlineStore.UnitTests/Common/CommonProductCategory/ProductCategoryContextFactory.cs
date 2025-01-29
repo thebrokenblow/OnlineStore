@@ -1,24 +1,40 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineShop.Persistence;
 
-namespace OnlineStore.UnitTests.Common;
+namespace OnlineStore.UnitTests.Common.CommonProductCategory;
 
 public class ProductCategoryContextFactory
 {
-    public static int ProductCategoryIdForDelete => 1;
-    public static int ProductCategoryIdForUpdate => 2;
-    public static int ProductCategoryIdForDetails => 3;
+    public int ProductCategoryIdForDelete { get; }
+    public int ProductCategoryIdForUpdate { get; }
+    public int ProductCategoryIdForDetails { get; }
 
-    public static OnlineStoreDbContext Create()
+    public string ProductCategoryName3 { get; }
+    public string ProductCategoryDescription3 { get; }
+
+
+    private OnlineStoreDbContext? _context;
+
+    public ProductCategoryContextFactory()
+    {
+        ProductCategoryIdForDelete = 1;
+        ProductCategoryIdForUpdate = 2;
+        ProductCategoryIdForDetails = 3;
+
+        ProductCategoryName3 = "Category3";
+        ProductCategoryDescription3 = "Description for Category3";
+    }
+
+    public OnlineStoreDbContext Create()
     {
         var options = new DbContextOptionsBuilder<OnlineStoreDbContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
 
-        var context = new OnlineStoreDbContext(options);
-        context.Database.EnsureCreated();
+        _context = new OnlineStoreDbContext(options);
+        _context.Database.EnsureCreated();
 
-        context.ProductCategories.AddRange(
+        _context.ProductCategories.AddRange(
             new()
             {
                 Id = ProductCategoryIdForDelete,
@@ -34,8 +50,8 @@ public class ProductCategoryContextFactory
             new()
             {
                 Id = ProductCategoryIdForDetails,
-                Name = "Category3",
-                Description = "Description for Category3"
+                Name = ProductCategoryName3,
+                Description = ProductCategoryDescription3
             },
             new()
             {
@@ -81,14 +97,14 @@ public class ProductCategoryContextFactory
             }
         );
 
-        context.SaveChanges();
+        _context.SaveChanges();
 
-        return context;
+        return _context;
     }
 
-    public static void Destroy(OnlineStoreDbContext context)
+    public void Destroy()
     {
-        context.Database.EnsureDeleted();
-        context.Dispose();
+        _context?.Database.EnsureDeleted();
+        _context?.Dispose();
     }
 }

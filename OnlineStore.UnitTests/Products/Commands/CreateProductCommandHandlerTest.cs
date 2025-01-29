@@ -1,26 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineShop.Application.Products.Commands.ProductCreation;
-using OnlineShop.Persistence.Repositories;
-using OnlineStore.UnitTests.Common;
+using OnlineStore.UnitTests.Common.CommonProduct;
 
 namespace OnlineStore.UnitTests.Products.Commands;
 
-public class CreateProductCommandHandlerTest
+public class CreateProductCommandHandlerTest : TestProductBase
 {
     [Fact]
-    public async Task CreateProductCategoryCommandHandler_Success()
+    public async Task CreateProductCommandHandler_Success()
     {
         // Arrange
 
-        var context = ProductContextFactory.Create();
-        var repositoryProduct = new RepositoryProduct(context);
-        var repositoryProductCategory = new RepositoryProductCategory(context);
-
-        var handler = new CreateProductCommandHandler(repositoryProduct, repositoryProductCategory);
+        var handler = new CreateProductCommandHandler(_repositoryProduct, _repositoryProductCategory);
 
         //Количество продуктов уже с добавленным продуктом
 
-        var countProduct = context.Products.Count() + 1;
+        var countProduct = _context.Products.Count() + 1;
 
         string nameProduct = "Camera";
         string descriptionProduct = "A professional camera";
@@ -31,7 +26,7 @@ public class CreateProductCommandHandlerTest
             Name = nameProduct,
             Description = descriptionProduct,
             Price = priceProduct,
-            IdProductCategory = ProductContextFactory.ProductCategories!.First().Id,
+            IdProductCategory = _factoryProductCategoryContext.IdElectronicProductCategory,
         };
 
         //Act
@@ -42,7 +37,7 @@ public class CreateProductCommandHandlerTest
 
         // Assert
 
-        var product = await context.Products.SingleOrDefaultAsync(
+        var product = await _context.Products.SingleOrDefaultAsync(
             product =>
                 product.Id == productId &&
                 product.Name == nameProduct &&
@@ -51,6 +46,6 @@ public class CreateProductCommandHandlerTest
 
         Assert.NotNull(product);
 
-        Assert.Equal(countProduct, context.Products.Count());
+        Assert.Equal(countProduct, _context.Products.Count());
     }
 }

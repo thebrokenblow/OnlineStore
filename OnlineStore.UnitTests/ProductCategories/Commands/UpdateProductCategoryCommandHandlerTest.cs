@@ -1,28 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineShop.Application.Common.Exceptions;
 using OnlineShop.Application.ProductCategories.Commands.ProductCategoryUpdate;
-using OnlineShop.Persistence.Repositories;
-using OnlineStore.UnitTests.Common;
+using OnlineStore.UnitTests.Common.CommonProductCategory;
 
 namespace OnlineStore.UnitTests.ProductCategories.Commands;
 
-public class UpdateProductCategoryCommandHandlerTest
+public class UpdateProductCategoryCommandHandlerTest : TestProductCategoryBase
 {
     [Fact]
     public async Task UpdateProductCategoryCommandHandler_Success()
     {
         // Arrange
 
-        var context = ProductCategoryContextFactory.Create();
-        var repository = new RepositoryProductCategory(context);
-        var handler = new UpdateProductCategoryCommandHandler(repository);
+        var handler = new UpdateProductCategoryCommandHandler(_productCategoryRepository);
 
         var updatedName = "new name";
         var updatedDescription = "new description";
 
         var updateProductCategoryCommand = new UpdateProductCategoryCommand
         {
-            Id = ProductCategoryContextFactory.ProductCategoryIdForUpdate,
+            Id = _productCategoryContextFactory.ProductCategoryIdForUpdate,
             Name = updatedName,
             Description = updatedDescription
         };
@@ -33,8 +30,8 @@ public class UpdateProductCategoryCommandHandlerTest
 
         // Assert
 
-        var productCategory = await context.ProductCategories.SingleOrDefaultAsync(productCategory => 
-                                        productCategory.Id == ProductCategoryContextFactory.ProductCategoryIdForUpdate &&
+        var productCategory = await _context.ProductCategories.SingleOrDefaultAsync(productCategory => 
+                                        productCategory.Id == _productCategoryContextFactory.ProductCategoryIdForUpdate &&
                                         productCategory.Name == updatedName &&
                                         productCategory.Description == updatedDescription);
 
@@ -46,16 +43,13 @@ public class UpdateProductCategoryCommandHandlerTest
     {
         // Arrange
 
-        var context = ProductCategoryContextFactory.Create();
-        var repository = new RepositoryProductCategory(context);
-        var handler = new UpdateProductCategoryCommandHandler(repository);
-
+        var handler = new UpdateProductCategoryCommandHandler(_productCategoryRepository);
 
         //Генерация случайного идентификатора
 
         var updateProductCategoryCommand = new UpdateProductCategoryCommand
         {
-            Id = new Random().Next(context.ProductCategories.Count(), 1000),
+            Id = new Random().Next(_context.ProductCategories.Count(), 1000),
             Name = string.Empty,
         };
 

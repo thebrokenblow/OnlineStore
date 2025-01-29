@@ -1,24 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineShop.Application.ProductCategories.Commands.ProductCategoryCreation;
-using OnlineShop.Persistence.Repositories;
-using OnlineStore.UnitTests.Common;
+using OnlineStore.UnitTests.Common.CommonProductCategory;
 
 namespace OnlineStore.UnitTests.ProductCategories.Commands;
 
-public class CreateProductCategoryCommandHandlerTest
+public class CreateProductCategoryCommandHandlerTest : TestProductCategoryBase
 {
     [Fact]
     public async Task CreateProductCategoryCommandHandler_Success()
     {
         // Arrange
 
-        var context = ProductCategoryContextFactory.Create();
-        var repository = new RepositoryProductCategory(context);
-        var handler = new CreateProductCategoryCommandHandler(repository);
+        var handler = new CreateProductCategoryCommandHandler(_productCategoryRepository);
 
         //Количество категорий продукта уже с новой добавленной категорией
 
-        var countProductCategory = context.ProductCategories.Count() + 1;
+        var countProductCategory = _context.ProductCategories.Count() + 1;
 
         var productCategoryName = "Category11";
         var productCategoryDescription = "Description for Category11";
@@ -37,7 +34,7 @@ public class CreateProductCategoryCommandHandlerTest
 
         // Assert
 
-        var productCategory = await context.ProductCategories.SingleOrDefaultAsync(
+        var productCategory = await _context.ProductCategories.SingleOrDefaultAsync(
             productCategory =>
                 productCategory.Id == productCategoryId &&
                 productCategory.Name == productCategoryName &&
@@ -45,6 +42,6 @@ public class CreateProductCategoryCommandHandlerTest
 
         Assert.NotNull(productCategory);
 
-        Assert.Equal(countProductCategory, context.ProductCategories.Count());
+        Assert.Equal(countProductCategory, _context.ProductCategories.Count());
     }
 }
