@@ -15,6 +15,7 @@ public class CreateProductCommandHandler(IRepositoryProduct repositoryProduct, I
             Name = request.Name,
             Description = request.Description,
             Price = request.Price,
+            IdProductCategory = productCategory.Id,
             ProductCategory = productCategory,
         };
 

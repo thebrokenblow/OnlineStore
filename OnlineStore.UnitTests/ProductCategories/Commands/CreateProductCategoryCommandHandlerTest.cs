@@ -16,7 +16,8 @@ public class CreateProductCategoryCommandHandlerTest
         var repository = new RepositoryProductCategory(context);
         var handler = new CreateProductCategoryCommandHandler(repository);
 
-        //Количество категорий продукта уже с добавленным продуктом
+        //Количество категорий продукта уже с новой добавленной категорией
+
         var countProductCategory = context.ProductCategories.Count() + 1;
 
         var productCategoryName = "Category11";

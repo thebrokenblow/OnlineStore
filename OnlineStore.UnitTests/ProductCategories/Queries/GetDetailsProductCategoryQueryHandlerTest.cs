@@ -1,5 +1,4 @@
 ﻿using OnlineShop.Application.Common.Exceptions;
-using OnlineShop.Application.ProductCategories.Commands.ProductCategoryUpdate;
 using OnlineShop.Application.ProductCategories.Queries.GetDetailsProductCategory;
 using OnlineShop.Persistence.Repositories;
 using OnlineStore.UnitTests.Common;
@@ -8,7 +7,6 @@ namespace OnlineStore.UnitTests.ProductCategories.Queries;
 
 public class GetDetailsProductCategoryQueryHandlerTest
 {
-
     [Fact]
     public async Task GetDetailsProductCategoryQueryHandler_Success()
     {
@@ -54,6 +52,7 @@ public class GetDetailsProductCategoryQueryHandlerTest
 
         // Act
         // Assert
+
         await Assert.ThrowsAsync<NotFoundException>(async () =>
             await handler.Handle(
                 getDetailsProductCategoryQuery,

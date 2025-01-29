@@ -41,13 +41,13 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .IsRequired();
 
         builder
-            .Property(product => product.ProductCategoryId)
+            .Property(product => product.IdProductCategory)
             .HasColumnName("product_category_id");
 
         builder
             .HasOne(product => product.ProductCategory)
             .WithMany()
-            .HasForeignKey(product => product.ProductCategoryId)
+            .HasForeignKey(product => product.IdProductCategory)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -21,7 +21,7 @@ public class RepositoryProductCategory(OnlineStoreDbContext context) : IReposito
 
     public async Task DeleteAsync(int id, CancellationToken cancellationToken)
     {
-        var productCategory = await GetByIdTrackingAsync(id, cancellationToken);
+        var productCategory = await GetByIdAsync(id, cancellationToken);
 
         context.Remove(productCategory);
         await context.SaveChangesAsync(cancellationToken);
@@ -29,7 +29,7 @@ public class RepositoryProductCategory(OnlineStoreDbContext context) : IReposito
 
     public async Task UpdateAsync(UpdateProductCategoryDto updateProductCategory, CancellationToken cancellationToken)
     {
-        var productCategory = await GetByIdTrackingAsync(updateProductCategory.Id, cancellationToken);
+        var productCategory = await GetByIdAsync(updateProductCategory.Id, cancellationToken);
 
         productCategory.Name = updateProductCategory.Name;
         productCategory.Description = updateProductCategory.Description;
@@ -75,13 +75,7 @@ public class RepositoryProductCategory(OnlineStoreDbContext context) : IReposito
 
     public async Task<ProductCategory> GetByIdAsync(int id, CancellationToken cancellationToken) =>
         await context.ProductCategories
-                        .AsNoTracking()
                         .SingleOrDefaultAsync(
                             productCategory => productCategory.Id == id, cancellationToken)
                                 ?? throw new NotFoundException(nameof(ProductCategory), id);
-
-    private async Task<ProductCategory> GetByIdTrackingAsync(int id, CancellationToken cancellationToken) =>
-        await context.ProductCategories.SingleOrDefaultAsync(
-                productCategory => productCategory.Id == id, cancellationToken) 
-                    ?? throw new NotFoundException(nameof(ProductCategory), id);
 }

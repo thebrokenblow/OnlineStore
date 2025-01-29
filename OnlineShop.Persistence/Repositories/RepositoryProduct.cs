@@ -24,7 +24,7 @@ public class RepositoryProduct(OnlineStoreDbContext context) : IRepositoryProduc
     {
         var product = await GetByIdTrackingAsync(id, cancellationToken);
 
-        context.Product.Remove(product);
+        context.Products.Remove(product);
         await context.SaveChangesAsync(cancellationToken);
     }
 
@@ -41,7 +41,7 @@ public class RepositoryProduct(OnlineStoreDbContext context) : IRepositoryProduc
     }
 
     public async Task<List<GetRangeProductDto>> GetRangeAsync(int countSkip, int countTake, CancellationToken cancellationToken) =>
-        await context.Product
+        await context.Products
                         .Select(product => new GetRangeProductDto
                         {
                             Id = product.Id,
@@ -53,7 +53,7 @@ public class RepositoryProduct(OnlineStoreDbContext context) : IRepositoryProduc
                         .ToListAsync(cancellationToken);
 
     public async Task<GetDetailsProductDto> GetDetailsByIdAsync(int id, CancellationToken cancellationToken) =>
-        await context.Product
+        await context.Products
                    .Select(product => CreateDetailsProductDto(product))
                    .Include(product => product.ProductCategory)
                    .AsNoTracking()
@@ -63,17 +63,17 @@ public class RepositoryProduct(OnlineStoreDbContext context) : IRepositoryProduc
                        ?? throw new NotFoundException(nameof(Product), id);
 
     private async Task<Product> GetByIdTrackingAsync(int id, CancellationToken cancellationToken) =>
-        await context.Product.SingleOrDefaultAsync(
+        await context.Products.SingleOrDefaultAsync(
                 product => product.Id == id, cancellationToken)
                     ?? throw new NotFoundException(nameof(ProductCategory), id);
 
     public async Task<Product> GetByIdAsync(int id, CancellationToken cancellationToken = default) =>
-        await context.Product.SingleOrDefaultAsync(
+        await context.Products.SingleOrDefaultAsync(
                     product => product.Id == id, cancellationToken)
                         ?? throw new NotFoundException(nameof(ProductCategory), id);
 
     public async Task<List<GetAllProductDto>> GetAllAsync(CancellationToken cancellationToken) =>
-         await context.Product
+         await context.Products
                         .Select(product => new GetAllProductDto
                         {
                             Id = product.Id,

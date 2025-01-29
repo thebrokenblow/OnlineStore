@@ -42,7 +42,7 @@ public class UpdateProductCategoryCommandHandlerTest
     }
 
     [Fact]
-    public async Task UpdateNoteCommandHandler_FailOnWrongId()
+    public async Task UpdateProductCategoryCommandHandler_FailOnWrongId()
     {
         // Arrange
 
@@ -61,6 +61,7 @@ public class UpdateProductCategoryCommandHandlerTest
 
         // Act
         // Assert
+
         await Assert.ThrowsAsync<NotFoundException>(async () =>
             await handler.Handle(
                 updateProductCategoryCommand,
