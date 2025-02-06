@@ -13,8 +13,10 @@ public class GetRangeProductCategoryQueryHandlerTest : TestProductCategoryBase
     public async Task GetRangeProductCategoryQueryHandler_Success(int countSkip, int countTake, int countResult)
     {
         // Arrange
-
-        var handler = new GetRangeProductCategoryQueryHandler(_productCategoryRepository);
+        var getRangeProductCategoryQueryValidation = new GetRangeProductCategoryQueryValidation();
+        var handler = new GetRangeProductCategoryQueryHandler(
+            _productCategoryRepository, 
+            getRangeProductCategoryQueryValidation);
 
         var getRangeProductCategoryQuery = new GetRangeProductCategoryQuery
         {
@@ -23,13 +25,11 @@ public class GetRangeProductCategoryQueryHandlerTest : TestProductCategoryBase
         };
 
         // Act
-
         var result = await handler.Handle(
             getRangeProductCategoryQuery,
             CancellationToken.None);
 
         // Assert
-
         Assert.Equal(countResult, result.Count);
     }
 }

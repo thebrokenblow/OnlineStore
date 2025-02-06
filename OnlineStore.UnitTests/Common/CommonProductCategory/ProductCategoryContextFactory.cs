@@ -9,8 +9,8 @@ public class ProductCategoryContextFactory
     public int ProductCategoryIdForUpdate { get; }
     public int ProductCategoryIdForDetails { get; }
 
-    public string ProductCategoryName3 { get; }
-    public string ProductCategoryDescription3 { get; }
+    public string ProductCategoryNameGardenTools { get; }
+    public string ProductCategoryDescriptionGardenTools { get; }
 
 
     private OnlineStoreDbContext? _context;
@@ -21,8 +21,8 @@ public class ProductCategoryContextFactory
         ProductCategoryIdForUpdate = 2;
         ProductCategoryIdForDetails = 3;
 
-        ProductCategoryName3 = "Category3";
-        ProductCategoryDescription3 = "Description for Category3";
+        ProductCategoryNameGardenTools = "Garden Tools";
+        ProductCategoryDescriptionGardenTools = "Tools and equipment for gardening";
     }
 
     public OnlineStoreDbContext Create()
@@ -38,62 +38,62 @@ public class ProductCategoryContextFactory
             new()
             {
                 Id = ProductCategoryIdForDelete,
-                Name = "Category1",
-                Description = "Description for Category1"
+                Name = "Home Decor",
+                Description = "Items for home decoration"
             },
             new()
             {
                 Id = ProductCategoryIdForUpdate,
-                Name = "Category2",
-                Description = "Description for Category2"
+                Name = "Kitchenware",
+                Description = "Utensils and appliances for the kitchen"
             },
             new()
             {
                 Id = ProductCategoryIdForDetails,
-                Name = ProductCategoryName3,
-                Description = ProductCategoryDescription3
+                Name = ProductCategoryNameGardenTools,
+                Description = ProductCategoryDescriptionGardenTools
             },
             new()
             {
                 Id = 4,
-                Name = "Category4",
-                Description = "Description for Category4"
+                Name = "Pet Supplies",
+                Description = "Supplies and accessories for pets"
             },
             new()
             {
                 Id = 5,
-                Name = "Category5",
-                Description = "Description for Category5"
+                Name = "Office Supplies",
+                Description = "Supplies and equipment for the office"
             },
             new()
             {
                 Id = 6,
-                Name = "Category6",
-                Description = "Description for Category6"
+                Name = "Health & Wellness",
+                Description = "Products for health and wellness"
             },
             new()
             {
                 Id = 7,
-                Name = "Category7",
-                Description = "Description for Category7"
+                Name = "Automotive",
+                Description = "Parts and accessories for vehicles"
             },
             new()
             {
                 Id = 8,
-                Name = "Category8",
-                Description = "Description for Category8"
+                Name = "Jewelry",
+                Description = "Jewelry and accessories"
             },
             new()
             {
                 Id = 9,
-                Name = "Category9",
-                Description = "Description for Category9"
+                Name = "Toys & Games",
+                Description = "Toys and games for children"
             },
             new()
             {
                 Id = 10,
-                Name = "Category10",
-                Description = "Description for Category10"
+                Name = "Furniture",
+                Description = "Furniture for home and office"
             }
         );
 

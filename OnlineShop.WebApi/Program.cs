@@ -1,12 +1,19 @@
-using OnlineShop.WebApi;
+namespace OnlineShop.WebApi;
 
-var host = CreateHostBuilder(args)
+public partial class Program
+{
+    public static void Main(string[] args)
+    {
+        var host = CreateHostBuilder(args)
            .Build();
-host.Run();
 
-static IHostBuilder CreateHostBuilder(string[] args) =>
+        host.Run();
+    }
+
+    private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+}

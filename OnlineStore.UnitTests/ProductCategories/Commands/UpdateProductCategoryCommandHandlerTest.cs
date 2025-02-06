@@ -11,11 +11,13 @@ public class UpdateProductCategoryCommandHandlerTest : TestProductCategoryBase
     public async Task UpdateProductCategoryCommandHandler_Success()
     {
         // Arrange
+        var updateProductCategoryCommandValidation = new UpdateProductCategoryCommandValidation();
+        var handler = new UpdateProductCategoryCommandHandler(
+            _productCategoryRepository, 
+            updateProductCategoryCommandValidation);
 
-        var handler = new UpdateProductCategoryCommandHandler(_productCategoryRepository);
-
-        var updatedName = "new name";
-        var updatedDescription = "new description";
+        var updatedName = "Kitchen Essentials";
+        var updatedDescription = "Utensils, appliances, and gadgets for the kitchen, including pots, pans, and cooking tools.";
 
         var updateProductCategoryCommand = new UpdateProductCategoryCommand
         {
@@ -25,11 +27,9 @@ public class UpdateProductCategoryCommandHandlerTest : TestProductCategoryBase
         };
 
         // Act
-
         await handler.Handle(updateProductCategoryCommand, CancellationToken.None);
 
         // Assert
-
         var productCategory = await _context.ProductCategories.SingleOrDefaultAsync(productCategory => 
                                         productCategory.Id == _productCategoryContextFactory.ProductCategoryIdForUpdate &&
                                         productCategory.Name == updatedName &&
@@ -42,20 +42,23 @@ public class UpdateProductCategoryCommandHandlerTest : TestProductCategoryBase
     public async Task UpdateProductCategoryCommandHandler_FailOnWrongId()
     {
         // Arrange
+        var updateProductCategoryCommandValidation = new UpdateProductCategoryCommandValidation();
+        var handler = new UpdateProductCategoryCommandHandler(
+            _productCategoryRepository,
+            updateProductCategoryCommandValidation);
 
-        var handler = new UpdateProductCategoryCommandHandler(_productCategoryRepository);
+        var updatedName = "Kitchen Essentials";
 
-        //Генерация случайного идентификатора
+        var id = await _context.ProductCategories.MaxAsync(productCategory => productCategory.Id) + 1;
 
         var updateProductCategoryCommand = new UpdateProductCategoryCommand
         {
-            Id = new Random().Next(_context.ProductCategories.Count(), 1000),
-            Name = string.Empty,
+            Id = id,
+            Name = updatedName
         };
 
         // Act
         // Assert
-
         await Assert.ThrowsAsync<NotFoundException>(async () =>
             await handler.Handle(
                 updateProductCategoryCommand,

@@ -1,17 +1,17 @@
-﻿using OnlineShop.Application.Common.Exceptions;
+﻿using Microsoft.EntityFrameworkCore;
+using OnlineShop.Application.Common.Exceptions;
 using OnlineShop.Application.ProductCategories.Queries.GetDetailsProductCategory;
 using OnlineShop.Application.Products.Queries.GetDetailsProduct;
 using OnlineStore.UnitTests.Common.CommonProduct;
 
 namespace OnlineStore.UnitTests.Products.Queries;
 
-public class GetDetailsProductCategoryQueryHandlerTest : TestProductBase
+public class GetDetailsProductQueryHandlerTest : TestProductBase
 {
     [Fact]
     public async Task GetDetailsProductQueryHandler_Success()
     {
         // Arrange
-
         var handler = new GetDetailsProductQueryHandler(_repositoryProduct);
 
         var getDetailsProductQuery = new GetDetailsProductQuery
@@ -20,27 +20,24 @@ public class GetDetailsProductCategoryQueryHandlerTest : TestProductBase
         };
 
         // Act
-
         var result = await handler.Handle(
             getDetailsProductQuery,
             CancellationToken.None);
 
         // Assert
+        var productForDetails = _factoryProductCategoryContext.ProductForDetails;
 
-        Assert.Equal(_factoryProductCategoryContext.ProductForDetails.Name, 
-            result.Name);
+        Assert.Equal(productForDetails.Name, result.Name);
+        Assert.Equal(productForDetails.Description, result.Description);
+        Assert.Equal(productForDetails.Price, result.Price);
 
-        Assert.Equal(_factoryProductCategoryContext.ProductForDetails.Description, 
-            result.Description);
+        var resultProductCategory = result.ProductCategory;
+        var productCategory = productForDetails.ProductCategory;
+       
+        Assert.NotNull(productCategory);
 
-        Assert.Equal(_factoryProductCategoryContext.ProductForDetails.Price, 
-            result.Price);
-
-        Assert.Equal(_factoryProductCategoryContext.ProductForDetails.ProductCategory.Name, 
-            result.ProductCategory.Name);
-
-        Assert.Equal(_factoryProductCategoryContext.ProductForDetails.ProductCategory.Description,
-            result.ProductCategory.Description);
+        Assert.Equal(productCategory.Name, resultProductCategory.Name);
+        Assert.Equal(productCategory.Description, resultProductCategory.Description);
     }
 
 
@@ -48,12 +45,10 @@ public class GetDetailsProductCategoryQueryHandlerTest : TestProductBase
     public async Task GetDetailsProductQueryHandler_FailOnWrongId()
     {
         // Arrange
-
         var handler = new GetDetailsProductCategoryQueryHandler(_repositoryProductCategory);
 
-        //Генерация случайного идентификатора
-
-        var id = new Random().Next(_context.ProductCategories.Count(), 1000);
+        //Генерация несуществующего id
+        var id = await _context.ProductCategories.MaxAsync(productCategory => productCategory.Id) + 1;
 
         var getDetailsProductCategoryQuery = new GetDetailsProductCategoryQuery
         {
@@ -62,7 +57,6 @@ public class GetDetailsProductCategoryQueryHandlerTest : TestProductBase
 
         // Act
         // Assert
-
         await Assert.ThrowsAsync<NotFoundException>(async () =>
             await handler.Handle(
                 getDetailsProductCategoryQuery,

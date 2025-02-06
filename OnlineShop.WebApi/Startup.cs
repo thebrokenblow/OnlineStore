@@ -10,12 +10,12 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace OnlineShop.WebApi;
 
-public class Startup(IConfiguration configuration)
+public partial class Startup(IConfiguration configuration, IWebHostEnvironment env)
 {
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddApplication();
-        services.AddPersistence(configuration);
+        services.AddPersistence(configuration, env.EnvironmentName);
         services.AddControllers();
         services.AddSwaggerGen();
 

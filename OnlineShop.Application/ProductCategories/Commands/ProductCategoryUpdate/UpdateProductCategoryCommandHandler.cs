@@ -1,12 +1,17 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using OnlineShop.Application.Repositories.Interfaces;
 
 namespace OnlineShop.Application.ProductCategories.Commands.ProductCategoryUpdate;
 
-public class UpdateProductCategoryCommandHandler(IRepositoryProductCategory repositoryProductCategory) : IRequestHandler<UpdateProductCategoryCommand>
+public class UpdateProductCategoryCommandHandler(
+    IRepositoryProductCategory repositoryProductCategory, 
+    IValidator<UpdateProductCategoryCommand> validator) : IRequestHandler<UpdateProductCategoryCommand>
 {
     public async Task Handle(UpdateProductCategoryCommand request, CancellationToken cancellationToken)
     {
+        validator.ValidateAndThrow(request);
+
         var updateProductCategoryDto = new UpdateProductCategoryDto
         {
             Id = request.Id,

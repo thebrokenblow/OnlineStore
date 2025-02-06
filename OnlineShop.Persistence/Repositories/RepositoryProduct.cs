@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using OnlineShop.Application.Common.Exceptions;
 using OnlineShop.Application.ProductCategories.Queries.GetDetailsProductCategory;
 using OnlineShop.Application.Products.Commands.ProductUpdate;
@@ -10,10 +11,13 @@ using OnlineShop.Domain;
 
 namespace OnlineShop.Persistence.Repositories;
 
-public class RepositoryProduct(OnlineStoreDbContext context) : IRepositoryProduct
+public class RepositoryProduct(OnlineStoreDbContext context, IRepositoryProductCategory repositoryProductCategory) : IRepositoryProduct
 {
     public async Task<int> AddAsync(Product product, CancellationToken cancellationToken)
     {
+        var productCategory = await repositoryProductCategory.GetByIdAsync(product.IdProductCategory, cancellationToken);
+        product.ProductCategory = productCategory;
+
         await context.AddAsync(product, cancellationToken);
         await context.SaveChangesAsync(cancellationToken);
 
@@ -31,11 +35,12 @@ public class RepositoryProduct(OnlineStoreDbContext context) : IRepositoryProduc
     public async Task UpdateAsync(UpdateProductDto updateProductDto, CancellationToken cancellationToken)
     {
         var product = await GetByIdTrackingAsync(updateProductDto.Id, cancellationToken);
+        var productCategory = await repositoryProductCategory.GetByIdAsync(updateProductDto.IdProductCategory, cancellationToken);
 
         product.Name = updateProductDto.Name;
         product.Description = updateProductDto.Description;
         product.Price = updateProductDto.Price;
-        product.ProductCategory = updateProductDto.ProductCategory;
+        product.ProductCategory = productCategory;
 
         await context.SaveChangesAsync(cancellationToken);
     }
@@ -88,7 +93,7 @@ public class RepositoryProduct(OnlineStoreDbContext context) : IRepositoryProduc
     {
         var productCategory = new GetDetailsProductCategoryDto
         {
-            Id = product.ProductCategory.Id,
+            Id = product.ProductCategory!.Id,
             Name = product.ProductCategory.Name,
             Description = product.ProductCategory.Description,
         };

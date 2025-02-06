@@ -10,11 +10,10 @@ public class CreateProductCommandHandlerTest : TestProductBase
     public async Task CreateProductCommandHandler_Success()
     {
         // Arrange
-
-        var handler = new CreateProductCommandHandler(_repositoryProduct, _repositoryProductCategory);
+        var createProductCommandValidator = new CreateProductCommandValidator();
+        var handler = new CreateProductCommandHandler(_repositoryProduct, createProductCommandValidator);
 
         //Количество продуктов уже с добавленным продуктом
-
         var countProduct = _context.Products.Count() + 1;
 
         string nameProduct = "Camera";
@@ -30,13 +29,11 @@ public class CreateProductCommandHandlerTest : TestProductBase
         };
 
         //Act
-
         var productId = await handler.Handle(
             createProductCommand,
             CancellationToken.None);
 
         // Assert
-
         var product = await _context.Products.SingleOrDefaultAsync(
             product =>
                 product.Id == productId &&

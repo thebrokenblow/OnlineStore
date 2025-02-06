@@ -10,15 +10,14 @@ public class CreateProductCategoryCommandHandlerTest : TestProductCategoryBase
     public async Task CreateProductCategoryCommandHandler_Success()
     {
         // Arrange
-
-        var handler = new CreateProductCategoryCommandHandler(_productCategoryRepository);
+        var createProductCategoryCommandValidation = new CreateProductCategoryCommandValidation();
+        var handler = new CreateProductCategoryCommandHandler(_productCategoryRepository, createProductCategoryCommandValidation);
 
         //Количество категорий продукта уже с новой добавленной категорией
-
         var countProductCategory = _context.ProductCategories.Count() + 1;
 
-        var productCategoryName = "Category11";
-        var productCategoryDescription = "Description for Category11";
+        var productCategoryName = "Home Decor";
+        var productCategoryDescription = "Items for home decoration, including wall art, decorative pillows, and home accents.";
 
         var createProductCategoryCommand = new CreateProductCategoryCommand
         {
@@ -27,13 +26,11 @@ public class CreateProductCategoryCommandHandlerTest : TestProductCategoryBase
         };
 
         //Act
-
         var productCategoryId = await handler.Handle(
             createProductCategoryCommand, 
             CancellationToken.None);
 
         // Assert
-
         var productCategory = await _context.ProductCategories.SingleOrDefaultAsync(
             productCategory =>
                 productCategory.Id == productCategoryId &&

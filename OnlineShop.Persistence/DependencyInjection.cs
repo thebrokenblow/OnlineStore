@@ -8,16 +8,28 @@ namespace OnlineShop.Persistence;
 
 public static class DependencyInjection
 {
-    private const string keyConnectionString = "DbConnection";
+    private const string developmentConnectionString = "DevelopmentDbConnection";
+    private const string testingConnectionString = "TestingDbConnection";
 
-    public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddPersistence(
+        this IServiceCollection services, 
+        IConfiguration configuration,
+        string environment)
     {
-        var connectionString = configuration[keyConnectionString];
-
-        services.AddDbContext<OnlineStoreDbContext>(options =>
+        if (environment == "Development")
         {
-            options.UseNpgsql(connectionString);
-        });
+            var connectionString = configuration.GetConnectionString(developmentConnectionString);
+
+            services.AddDbContext<OnlineStoreDbContext>(options =>
+                options.UseNpgsql(connectionString));
+        }
+        else if (environment == "Testing")
+        {
+            var connectionString = configuration.GetConnectionString(testingConnectionString);
+
+            services.AddDbContext<OnlineStoreDbContext>(options =>
+                options.UseNpgsql(connectionString));
+        }
 
         services.AddScoped<IRepositoryProduct, RepositoryProduct>();
         services.AddScoped<IRepositoryProductCategory, RepositoryProductCategory>();

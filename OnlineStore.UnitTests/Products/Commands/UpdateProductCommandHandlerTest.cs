@@ -8,11 +8,11 @@ namespace OnlineStore.UnitTests.Products.Commands;
 public class UpdateProductCommandHandlerTest : TestProductBase
 {
     [Fact]
-    public async Task UpdateProductCategoryCommandHandler_Success()
+    public async Task UpdateProductCommandHandler_Success()
     {
         // Arrange
-
-        var handler = new UpdateProductCommandHandler(_repositoryProduct, _repositoryProductCategory);
+        var updateProductCommandValidation = new UpdateProductCommandValidation();
+        var handler = new UpdateProductCommandHandler(_repositoryProduct, updateProductCommandValidation);
 
         var updatedName = "Modern Web Development";
         var updatedDescription = "A detailed guide to modern web development practices.";
@@ -28,11 +28,9 @@ public class UpdateProductCommandHandlerTest : TestProductBase
         };
 
         // Act
-
         await handler.Handle(updateProductCommand, CancellationToken.None);
 
         // Assert
-
         var product = await _context.Products.SingleOrDefaultAsync(product =>
                                         product.Id == _factoryProductCategoryContext.IdProductForUpdate &&
                                         product.Name == updatedName &&
@@ -47,12 +45,11 @@ public class UpdateProductCommandHandlerTest : TestProductBase
     public async Task UpdateProductCommandHandler_FailOnWrongId()
     {
         // Arrange
+        var updateProductCommandValidation = new UpdateProductCommandValidation();
+        var handler = new UpdateProductCommandHandler(_repositoryProduct, updateProductCommandValidation);
 
-        var handler = new UpdateProductCommandHandler(_repositoryProduct, _repositoryProductCategory);
-
-        //Генерация случайного идентификатора
-
-        var id = new Random().Next(_context.ProductCategories.Count(), 1000);
+        //Генерация несуществующего id
+        var id = await _context.Products.MaxAsync(productCategory => productCategory.Id) + 1;
         var updatedName = "Wireless Noise-Cancelling Headphones";
         var updatedDescription = "High-quality wireless headphones with active noise-cancelling technology.";
         var updatedPrice = 249.99m;
@@ -68,7 +65,6 @@ public class UpdateProductCommandHandlerTest : TestProductBase
 
         // Act
         // Assert
-
         await Assert.ThrowsAsync<NotFoundException>(async () =>
             await handler.Handle(
                 updateProductCommand,

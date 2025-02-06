@@ -13,7 +13,6 @@ public class UpdateProductCategoryCommandValidation : AbstractValidator<UpdatePr
 
         RuleFor(updateProductCategoryCommand =>
             updateProductCategoryCommand.Description)
-            .NotEmpty()
             .MaximumLength(1024);
     }
 }

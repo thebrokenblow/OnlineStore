@@ -16,8 +16,8 @@ public abstract class TestProductBase : IDisposable
     {
         _context = _factoryProductCategoryContext.Create();
 
-        _repositoryProduct = new(_context);
         _repositoryProductCategory = new(_context);
+        _repositoryProduct = new(_context, _repositoryProductCategory);
     }
 
     public void Dispose()
