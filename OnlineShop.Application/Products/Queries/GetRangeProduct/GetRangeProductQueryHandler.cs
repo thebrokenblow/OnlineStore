@@ -4,9 +4,9 @@ using OnlineShop.Application.Repositories.Interfaces;
 
 namespace OnlineShop.Application.Products.Queries.GetRangeProduct;
 
-public class GetRangeProductQueryHandler(IRepositoryProduct repositoryProduct, IValidator<GetRangeProductQuery> validator) : IRequestHandler<GetRangeProductQuery, List<GetRangeProductDto>>
+public class GetRangeProductQueryHandler(IRepositoryProduct repositoryProduct, IValidator<GetRangeProductQuery> validator) : IRequestHandler<GetRangeProductQuery, List<RangeProductDto>>
 {
-    public async Task<List<GetRangeProductDto>> Handle(GetRangeProductQuery request, CancellationToken cancellationToken)
+    public async Task<List<RangeProductDto>> Handle(GetRangeProductQuery request, CancellationToken cancellationToken)
     {
         validator.ValidateAndThrow(request);
 

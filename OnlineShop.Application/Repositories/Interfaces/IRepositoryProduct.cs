@@ -12,7 +12,7 @@ public interface IRepositoryProduct
     Task DeleteAsync(int id, CancellationToken cancellationToken = default);
     Task UpdateAsync(UpdateProductDto updateProductDto, CancellationToken cancellationToken = default);
     Task<Product> GetByIdAsync(int id, CancellationToken cancellationToken = default);
-    Task<GetDetailsProductDto> GetDetailsByIdAsync(int id, CancellationToken cancellationToken = default);
-    Task<List<GetRangeProductDto>> GetRangeAsync(int countSkip, int countTake, CancellationToken cancellationToken = default);
-    Task<List<GetAllProductDto>> GetAllAsync(CancellationToken cancellationToken);
+    Task<DetailsProductDto> GetDetailsByIdAsync(int id, CancellationToken cancellationToken = default);
+    Task<List<RangeProductDto>> GetRangeAsync(int countSkip, int countTake, CancellationToken cancellationToken = default);
+    Task<List<AllProductDto>> GetAllAsync(CancellationToken cancellationToken);
 }

@@ -2,6 +2,6 @@
 
 namespace OnlineShop.Application.Products.Queries.GetAllProduct;
 
-public class GetAllProductQuery : IRequest<List<GetAllProductDto>>
+public class GetAllProductQuery : IRequest<List<AllProductDto>>
 {
 }

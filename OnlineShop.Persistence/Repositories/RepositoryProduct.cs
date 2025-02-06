@@ -45,9 +45,9 @@ public class RepositoryProduct(OnlineStoreDbContext context, IRepositoryProductC
         await context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<List<GetRangeProductDto>> GetRangeAsync(int countSkip, int countTake, CancellationToken cancellationToken) =>
+    public async Task<List<RangeProductDto>> GetRangeAsync(int countSkip, int countTake, CancellationToken cancellationToken) =>
         await context.Products
-                        .Select(product => new GetRangeProductDto
+                        .Select(product => new RangeProductDto
                         {
                             Id = product.Id,
                             Name = product.Name,
@@ -57,7 +57,7 @@ public class RepositoryProduct(OnlineStoreDbContext context, IRepositoryProductC
                         .AsNoTracking()
                         .ToListAsync(cancellationToken);
 
-    public async Task<GetDetailsProductDto> GetDetailsByIdAsync(int id, CancellationToken cancellationToken)
+    public async Task<DetailsProductDto> GetDetailsByIdAsync(int id, CancellationToken cancellationToken)
     {
         var product = await context.Products
                                    .Include(product => product.ProductCategory)
@@ -80,25 +80,25 @@ public class RepositoryProduct(OnlineStoreDbContext context, IRepositoryProductC
                     product => product.Id == id, cancellationToken)
                         ?? throw new NotFoundException(nameof(ProductCategory), id);
 
-    public async Task<List<GetAllProductDto>> GetAllAsync(CancellationToken cancellationToken) =>
+    public async Task<List<AllProductDto>> GetAllAsync(CancellationToken cancellationToken) =>
          await context.Products
-                        .Select(product => new GetAllProductDto
+                        .Select(product => new AllProductDto
                         {
                             Id = product.Id,
                             Name = product.Name,
                         })
                         .ToListAsync(cancellationToken);
 
-    private static GetDetailsProductDto CreateDetailsProductDto(Product product)
+    private static DetailsProductDto CreateDetailsProductDto(Product product)
     {
-        var productCategory = new GetDetailsProductCategoryDto
+        var productCategory = new DetailsProductCategoryDto
         {
             Id = product.ProductCategory!.Id,
             Name = product.ProductCategory.Name,
             Description = product.ProductCategory.Description,
         };
 
-        var detailsProductDto = new GetDetailsProductDto
+        var detailsProductDto = new DetailsProductDto
         {
             Id = product.Id,
             Name = product.Name,

@@ -6,9 +6,9 @@ namespace OnlineShop.Application.ProductCategories.Queries.GetRangeProductCatego
 
 public class GetRangeProductCategoryQueryHandler(
     IRepositoryProductCategory repositoryProductCategory,
-    IValidator<GetRangeProductCategoryQuery> validator) : IRequestHandler<GetRangeProductCategoryQuery, List<GetRangeProductCategoryDto>>
+    IValidator<GetRangeProductCategoryQuery> validator) : IRequestHandler<GetRangeProductCategoryQuery, List<RangeProductCategoryDto>>
 {
-    public async Task<List<GetRangeProductCategoryDto>> Handle(
+    public async Task<List<RangeProductCategoryDto>> Handle(
         GetRangeProductCategoryQuery request, 
         CancellationToken cancellationToken)
     {

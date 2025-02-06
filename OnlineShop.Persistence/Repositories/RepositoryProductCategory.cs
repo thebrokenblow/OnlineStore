@@ -37,9 +37,9 @@ public class RepositoryProductCategory(OnlineStoreDbContext context) : IReposito
         await context.SaveChangesAsync(cancellationToken);
     }
 
-    public Task<List<GetRangeProductCategoryDto>> GetRangeAsync(int countSkip, int countTake, CancellationToken cancellationToken) =>
+    public Task<List<RangeProductCategoryDto>> GetRangeAsync(int countSkip, int countTake, CancellationToken cancellationToken) =>
         context.ProductCategories
-            .Select(productCategory => new GetRangeProductCategoryDto
+            .Select(productCategory => new RangeProductCategoryDto
             {
                 Id = productCategory.Id,
                 Name = productCategory.Name,
@@ -49,9 +49,9 @@ public class RepositoryProductCategory(OnlineStoreDbContext context) : IReposito
             .AsNoTracking()
             .ToListAsync(cancellationToken);
 
-    public async Task<GetDetailsProductCategoryDto> GetDetailsAsync(int id, CancellationToken cancellationToken) =>
+    public async Task<DetailsProductCategoryDto> GetDetailsAsync(int id, CancellationToken cancellationToken) =>
         await context.ProductCategories
-                    .Select(productCategory => new GetDetailsProductCategoryDto
+                    .Select(productCategory => new DetailsProductCategoryDto
                     { 
                         Id = productCategory.Id,
                         Name = productCategory.Name,
@@ -63,9 +63,9 @@ public class RepositoryProductCategory(OnlineStoreDbContext context) : IReposito
                             cancellationToken)
                                 ?? throw new NotFoundException(nameof(ProductCategory), id);
 
-    public async Task<List<GetAllProductCategoryDto>> GetAllAsync(CancellationToken cancellationToken) =>
+    public async Task<List<AllProductCategoryDto>> GetAllAsync(CancellationToken cancellationToken) =>
         await context.ProductCategories
-                    .Select(productCategory => new GetAllProductCategoryDto
+                    .Select(productCategory => new AllProductCategoryDto
                     {
                         Id = productCategory.Id,
                         Name = productCategory.Name,

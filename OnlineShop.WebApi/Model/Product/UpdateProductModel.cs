@@ -1,9 +1,8 @@
-﻿using MediatR;
+﻿namespace OnlineShop.WebApi.Model.Product;
 
-namespace OnlineShop.Application.Products.Commands.ProductCreation;
-
-public class CreateProductCommand : IRequest<int>
+public class UpdateProductModel
 {
+    public required int Id { get; set; }
     public required string Name { get; set; }
     public required string Description { get; set; }
     public required decimal Price { get; set; }

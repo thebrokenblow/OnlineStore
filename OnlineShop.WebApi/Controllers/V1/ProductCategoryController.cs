@@ -8,6 +8,7 @@ using OnlineShop.Application.ProductCategories.Queries.GetAllProductCategory;
 using OnlineShop.Application.ProductCategories.Queries.GetDetailsProductCategory;
 using OnlineShop.Application.ProductCategories.Queries.GetRangeProductCategory;
 using OnlineShop.Domain;
+using OnlineShop.WebApi.Model.ProductCategory;
 
 namespace OnlineShop.WebApi.Controllers.V1;
 
@@ -26,12 +27,12 @@ public class ProductCategoryController(IMediator mediator) : ControllerBase
     /// Sample request:
     /// GET /api/products
     /// </remarks>
-    /// <returns>Returns list of getAllProductDto</returns>
+    /// <returns>Returns list of allProductDto</returns>
     /// <response code="200">Success</response>
     [HttpGet]
     [ActionName(nameof(GetAll))]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<GetAllProductCategoryDto>>> GetAll()
+    public async Task<ActionResult<List<AllProductCategoryDto>>> GetAll()
     {
         var allProductCategoryQuery = new GetAllProductCategoryQuery();
         var allProductCategories = await mediator.Send(allProductCategoryQuery);
@@ -48,14 +49,14 @@ public class ProductCategoryController(IMediator mediator) : ControllerBase
     /// Sample request:
     /// GET /api/productCategories/0/10
     /// </remarks>
-    /// <returns>Returns list of getAllProductCategoryDto</returns>
+    /// <returns>Returns list of rangeProductCategoryDto</returns>
     /// <response code="200">Success</response>
     /// <response code="400">If countSkip is less than zero or countTake is less than or equal to zero</response>
     [HttpGet("{countSkip}/{countTake}")]
     [ActionName(nameof(GetRange))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<List<GetRangeProductCategoryDto>>> GetRange(int countSkip, int countTake)
+    public async Task<ActionResult<List<RangeProductCategoryDto>>> GetRange(int countSkip, int countTake)
     {
         var rangeProductCategoryQuery = new GetRangeProductCategoryQuery
         {
@@ -76,14 +77,14 @@ public class ProductCategoryController(IMediator mediator) : ControllerBase
     /// GET /api/productCategories/1
     /// </remarks>
     /// <param name="id">Product category id (int)</param>
-    /// <returns>Returns ProductCategory</returns>
+    /// <returns>Returns detailsProductCategoryDto</returns>
     /// <response code="200">Success</response>
     /// <response code="404">If product category is not found by id</response>
     [HttpGet("{id}")]
     [ActionName(nameof(GetDetails))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<ProductCategory>> GetDetails(int id)
+    public async Task<ActionResult<DetailsProductCategoryDto>> GetDetails(int id)
     {
         var detailsProductCategoryQuery = new GetDetailsProductCategoryQuery
         {
@@ -106,7 +107,7 @@ public class ProductCategoryController(IMediator mediator) : ControllerBase
     ///     description: "description product category"
     /// }
     /// </remarks>
-    /// <param name="createProductCategoryCommand">CreateProductCategoryCommand object</param>
+    /// <param name="createProductCategoryModel">CreateProductCategoryModel object</param>
     /// <returns>Returns id (int)</returns>
     /// <response code="201">Success</response>
     /// <response code="400">
@@ -117,8 +118,14 @@ public class ProductCategoryController(IMediator mediator) : ControllerBase
     [ActionName(nameof(Create))]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<int>> Create([FromBody] CreateProductCategoryCommand createProductCategoryCommand)
+    public async Task<ActionResult<int>> Create([FromBody] CreateProductCategoryModel createProductCategoryModel)
     {
+        var createProductCategoryCommand = new CreateProductCategoryCommand
+        {
+            Name = createProductCategoryModel.Name,
+            Description = createProductCategoryModel.Description,
+        };
+
         var productCategoryId = await mediator.Send(createProductCategoryCommand);
 
         return CreatedAtAction(nameof(Create), productCategoryId);
@@ -136,7 +143,7 @@ public class ProductCategoryController(IMediator mediator) : ControllerBase
     ///     description: "updated product category description",
     /// }
     /// </remarks>
-    /// <param name="updateProductCategoryCommand">UpdateProductCategoryCommand object</param>
+    /// <param name="updateProductCategoryModel">UpdateProductCategoryModel object</param>
     /// <returns>Returns NoContent</returns>
     /// <response code="204">Success</response>
     /// <response code="400">
@@ -149,8 +156,15 @@ public class ProductCategoryController(IMediator mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<int>> Update([FromBody] UpdateProductCategoryCommand updateProductCategoryCommand)
+    public async Task<ActionResult<int>> Update([FromBody] UpdateProductCategoryModel updateProductCategoryModel)
     {
+        var updateProductCategoryCommand = new UpdateProductCategoryCommand
+        { 
+            Id = updateProductCategoryModel.Id,
+            Name = updateProductCategoryModel.Name,
+            Description = updateProductCategoryModel.Description,
+        };
+
         await mediator.Send(updateProductCategoryCommand);
 
         return NoContent();
