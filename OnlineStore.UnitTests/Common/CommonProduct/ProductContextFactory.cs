@@ -25,6 +25,7 @@ public class ProductContextFactory
 
     private OnlineStoreDbContext? _context;
 
+    public List<int> IdProductCategories { get; } = [];
     public ProductContextFactory()
     {
         IdElectronicProductCategory = 1;
@@ -71,6 +72,11 @@ public class ProductContextFactory
             Name = "Books",
             Description = "Books of all genres"
         };
+
+        IdProductCategories.AddRange(
+            IdElectronicProductCategory, 
+            IdBookProductCategory, 
+            IdClothingProductCategory);
     }
 
     public OnlineStoreDbContext Create()

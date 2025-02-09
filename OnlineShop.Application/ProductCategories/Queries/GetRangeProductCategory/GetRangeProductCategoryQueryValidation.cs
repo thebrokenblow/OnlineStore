@@ -4,6 +4,8 @@ namespace OnlineShop.Application.ProductCategories.Queries.GetRangeProductCatego
 
 public class GetRangeProductCategoryQueryValidation : AbstractValidator<GetRangeProductCategoryQuery>
 {
+    public const int MaxCountTake = 1000;
+
     public GetRangeProductCategoryQueryValidation()
     {
         RuleFor(getProductCategoryRangeQuery =>
@@ -12,6 +14,7 @@ public class GetRangeProductCategoryQueryValidation : AbstractValidator<GetRange
 
         RuleFor(getProductCategoryRangeQuery =>
             getProductCategoryRangeQuery.CountTake)
-            .GreaterThan(0);
+            .GreaterThanOrEqualTo(0)
+            .LessThanOrEqualTo(MaxCountTake);
     }
 }

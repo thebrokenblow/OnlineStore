@@ -5,10 +5,11 @@ namespace OnlineStore.UnitTests.Products.Queries;
 
 public class GetAllProductQueryHandlerTest : TestProductBase
 {
-    [Fact]
+    [Fact(DisplayName = "Successfully retrieve all products")]
     public async Task GetAllProductQueryHandler_Success()
     {
         // Arrange
+        var countProduct = _context.Products.Count();
         var handler = new GetAllProductQueryHandler(_repositoryProduct);
         var getAllProductQuery = new GetAllProductQuery();
 
@@ -18,6 +19,6 @@ public class GetAllProductQueryHandlerTest : TestProductBase
             CancellationToken.None);
 
         // Assert
-        Assert.Equal(10, result.Count);
+        Assert.Equal(countProduct, result.Count);
     }
 }

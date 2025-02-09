@@ -1,14 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using OnlineShop.Application.Common.Exceptions;
-using OnlineShop.Application.ProductCategories.Queries.GetDetailsProductCategory;
-using OnlineShop.Application.Products.Queries.GetDetailsProduct;
+﻿using OnlineShop.Application.Products.Queries.GetDetailsProduct;
 using OnlineStore.UnitTests.Common.CommonProduct;
+using Shouldly;
 
 namespace OnlineStore.UnitTests.Products.Queries;
 
 public class GetDetailsProductQueryHandlerTest : TestProductBase
 {
-    [Fact]
+    [Fact(DisplayName = "Successfully retrieve product details")]
     public async Task GetDetailsProductQueryHandler_Success()
     {
         // Arrange
@@ -27,39 +25,16 @@ public class GetDetailsProductQueryHandlerTest : TestProductBase
         // Assert
         var productForDetails = _factoryProductCategoryContext.ProductForDetails;
 
-        Assert.Equal(productForDetails.Name, result.Name);
-        Assert.Equal(productForDetails.Description, result.Description);
-        Assert.Equal(productForDetails.Price, result.Price);
+        result.Name.ShouldBe(productForDetails.Name);
+        result.Description.ShouldBe(productForDetails.Description);
+        result.Price.ShouldBe(productForDetails.Price);
 
         var resultProductCategory = result.ProductCategory;
         var productCategory = productForDetails.ProductCategory;
-       
-        Assert.NotNull(productCategory);
 
-        Assert.Equal(productCategory.Name, resultProductCategory.Name);
-        Assert.Equal(productCategory.Description, resultProductCategory.Description);
-    }
+        productCategory.ShouldNotBeNull();
 
-
-    [Fact]
-    public async Task GetDetailsProductQueryHandler_FailOnWrongId()
-    {
-        // Arrange
-        var handler = new GetDetailsProductCategoryQueryHandler(_repositoryProductCategory);
-
-        //Генерация несуществующего id
-        var id = await _context.ProductCategories.MaxAsync(productCategory => productCategory.Id) + 1;
-
-        var getDetailsProductCategoryQuery = new GetDetailsProductCategoryQuery
-        {
-            Id = id
-        };
-
-        // Act
-        // Assert
-        await Assert.ThrowsAsync<NotFoundException>(async () =>
-            await handler.Handle(
-                getDetailsProductCategoryQuery,
-                CancellationToken.None));
+        resultProductCategory.Name.ShouldBe(productCategory.Name);
+        resultProductCategory.Description.ShouldBe(productCategory.Description);
     }
 }

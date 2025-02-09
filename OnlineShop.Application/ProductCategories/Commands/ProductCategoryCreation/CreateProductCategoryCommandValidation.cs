@@ -4,16 +4,18 @@ namespace OnlineShop.Application.ProductCategories.Commands.ProductCategoryCreat
 
 public class CreateProductCategoryCommandValidation : AbstractValidator<CreateProductCategoryCommand>
 {
+    public const int MaxNameLength = 250;
+    public const int MaxDescriptionLength = 1024;
+
     public CreateProductCategoryCommandValidation()
     {
         RuleFor(createProductCategoryCommand =>
             createProductCategoryCommand.Name)
             .NotEmpty()
-            .MaximumLength(250);
+            .MaximumLength(MaxNameLength);
 
         RuleFor(createProductCategoryCommand =>
             createProductCategoryCommand.Description)
-            .NotEmpty()
-            .MaximumLength(1024);
+            .MaximumLength(MaxDescriptionLength);
     }
 }

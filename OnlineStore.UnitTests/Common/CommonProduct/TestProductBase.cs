@@ -1,4 +1,5 @@
-﻿using OnlineShop.Persistence;
+﻿using Bogus;
+using OnlineShop.Persistence;
 using OnlineShop.Persistence.Repositories;
 
 namespace OnlineStore.UnitTests.Common.CommonProduct;
@@ -12,12 +13,16 @@ public abstract class TestProductBase : IDisposable
 
     protected readonly ProductContextFactory _factoryProductCategoryContext = new();
 
+    protected readonly Faker _faker;
+
     public TestProductBase()
     {
         _context = _factoryProductCategoryContext.Create();
 
         _repositoryProductCategory = new(_context);
         _repositoryProduct = new(_context, _repositoryProductCategory);
+
+        _faker = new();
     }
 
     public void Dispose()

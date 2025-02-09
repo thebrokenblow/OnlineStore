@@ -19,7 +19,7 @@ public class CustomExceptionHandlerMiddleware(RequestDelegate next)
         }
     }
 
-    private Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         var code = HttpStatusCode.InternalServerError;
         var result = string.Empty;

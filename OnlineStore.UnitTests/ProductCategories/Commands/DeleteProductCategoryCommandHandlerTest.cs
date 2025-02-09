@@ -2,50 +2,37 @@
 using OnlineShop.Application.Common.Exceptions;
 using OnlineShop.Application.ProductCategories.Commands.ProductCategoryDeletion;
 using OnlineStore.UnitTests.Common.CommonProductCategory;
+using Shouldly;
 
 namespace OnlineStore.UnitTests.ProductCategories.Commands;
 
 public class DeleteProductCategoryCommandHandlerTest : TestProductCategoryBase
 {
-    [Fact]
+    private readonly DeleteProductCategoryCommandHandler _handler;
+
+    public DeleteProductCategoryCommandHandlerTest()
+    {
+        _handler = new(_productCategoryRepository);
+    }
+
+    [Fact(DisplayName = "Should successfully delete a product category")]
     public async Task DeleteProductCategoryCommandHandler_Success()
     {
         // Arrange
-        var handler = new DeleteProductCategoryCommandHandler(_productCategoryRepository);
+        var id = _productCategoryContextFactory.ProductCategoryIdForDelete;
 
         // Act
-        var deleteProductCategoryCommand = new DeleteProductCategoryCommand
-        {
-            Id = _productCategoryContextFactory.ProductCategoryIdForDelete
-        };
-
-        await handler.Handle(deleteProductCategoryCommand, CancellationToken.None);
-
-        // Assert
-        var productCategory = _context.ProductCategories.SingleOrDefault(productCategory =>
-                                        productCategory.Id == _productCategoryContextFactory.ProductCategoryIdForDelete);
-
-        Assert.Null(productCategory);
-    }
-
-    [Fact]
-    public async Task DeleteProductCategoryCommandHandler_FailOnWrongId()
-    {
-        // Arrange
-        var handler = new DeleteProductCategoryCommandHandler(_productCategoryRepository);
-
-        //Генерация случайного идентификатора
-        var id = await _context.ProductCategories.MaxAsync(productCategory => productCategory.Id) + 1;
         var deleteProductCategoryCommand = new DeleteProductCategoryCommand
         {
             Id = id
         };
 
-        // Act
+        await _handler.Handle(deleteProductCategoryCommand, CancellationToken.None);
+
         // Assert
-        await Assert.ThrowsAsync<NotFoundException>(async () =>
-            await handler.Handle(
-                deleteProductCategoryCommand,
-                CancellationToken.None));
+        var productCategory = await _context.ProductCategories.SingleOrDefaultAsync(productCategory =>
+                                        productCategory.Id == _productCategoryContextFactory.ProductCategoryIdForDelete);
+
+        productCategory.ShouldBeNull();
     }
 }

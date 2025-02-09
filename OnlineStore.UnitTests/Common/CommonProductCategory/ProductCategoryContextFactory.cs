@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Bogus;
+using Microsoft.EntityFrameworkCore;
+using OnlineShop.Application.ProductCategories.Commands.ProductCategoryCreation;
+using OnlineShop.Domain;
 using OnlineShop.Persistence;
 
 namespace OnlineStore.UnitTests.Common.CommonProductCategory;
@@ -12,8 +15,9 @@ public class ProductCategoryContextFactory
     public string ProductCategoryNameGardenTools { get; }
     public string ProductCategoryDescriptionGardenTools { get; }
 
-
     private OnlineStoreDbContext? _context;
+
+    private const int countProductCategoriesInDb = 10;
 
     public ProductCategoryContextFactory()
     {
@@ -34,7 +38,27 @@ public class ProductCategoryContextFactory
         _context = new OnlineStoreDbContext(options);
         _context.Database.EnsureCreated();
 
-        _context.ProductCategories.AddRange(
+        var productCategoryFaker = new Faker<ProductCategory>()
+            .RuleFor(productCategory => productCategory.Id, faker => faker.UniqueIndex + 4) // Start IDs from 4 to avoid collision with specific categories
+            .RuleFor(productCategory => productCategory.Name, faker =>
+            {
+                var name = faker.Commerce.ProductName();
+                return name.Length > CreateProductCategoryCommandValidation.MaxNameLength
+                    ? name[..CreateProductCategoryCommandValidation.MaxNameLength]
+                    : name;
+            })
+            .RuleFor(productCategory => productCategory.Description, faker =>
+            {
+                var description = faker.Commerce.ProductDescription();
+                return description.Length > CreateProductCategoryCommandValidation.MaxDescriptionLength
+                    ? description[..CreateProductCategoryCommandValidation.MaxDescriptionLength]
+                    : description;
+            });
+
+        var productCategories = productCategoryFaker.Generate(countProductCategoriesInDb);
+
+        var specificCategories = new List<ProductCategory>
+        {
             new()
             {
                 Id = ProductCategoryIdForDelete,
@@ -52,51 +76,12 @@ public class ProductCategoryContextFactory
                 Id = ProductCategoryIdForDetails,
                 Name = ProductCategoryNameGardenTools,
                 Description = ProductCategoryDescriptionGardenTools
-            },
-            new()
-            {
-                Id = 4,
-                Name = "Pet Supplies",
-                Description = "Supplies and accessories for pets"
-            },
-            new()
-            {
-                Id = 5,
-                Name = "Office Supplies",
-                Description = "Supplies and equipment for the office"
-            },
-            new()
-            {
-                Id = 6,
-                Name = "Health & Wellness",
-                Description = "Products for health and wellness"
-            },
-            new()
-            {
-                Id = 7,
-                Name = "Automotive",
-                Description = "Parts and accessories for vehicles"
-            },
-            new()
-            {
-                Id = 8,
-                Name = "Jewelry",
-                Description = "Jewelry and accessories"
-            },
-            new()
-            {
-                Id = 9,
-                Name = "Toys & Games",
-                Description = "Toys and games for children"
-            },
-            new()
-            {
-                Id = 10,
-                Name = "Furniture",
-                Description = "Furniture for home and office"
             }
-        );
+        };
 
+        productCategories.AddRange(specificCategories);
+
+        _context.ProductCategories.AddRange(productCategories);
         _context.SaveChanges();
 
         return _context;
