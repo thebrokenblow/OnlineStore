@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineShop.Domain;
-using OnlineShop.Persistence.Extensions;
+using System.Reflection;
 
 namespace OnlineShop.Persistence;
 
@@ -11,13 +11,7 @@ public class OnlineStoreDbContext(DbContextOptions<OnlineStoreDbContext> options
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyAllConfigurations();
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreating(modelBuilder);
-    }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-        optionsBuilder.UseSnakeCaseNamingConvention();
     }
 }

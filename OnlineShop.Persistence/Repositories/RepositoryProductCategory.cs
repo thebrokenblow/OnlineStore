@@ -6,6 +6,7 @@ using OnlineShop.Application.ProductCategories.Queries.GetDetailsProductCategory
 using OnlineShop.Application.ProductCategories.Queries.GetRangeProductCategory;
 using OnlineShop.Application.Repositories.Interfaces;
 using OnlineShop.Domain;
+using OnlineShop.Persistence.QueryObjects;
 
 namespace OnlineShop.Persistence.Repositories;
 
@@ -37,45 +38,60 @@ public class RepositoryProductCategory(OnlineStoreDbContext context) : IReposito
         await context.SaveChangesAsync(cancellationToken);
     }
 
-    public Task<List<RangeProductCategoryDto>> GetRangeAsync(int countSkip, int countTake, CancellationToken cancellationToken) =>
-        context.ProductCategories
-            .Select(productCategory => new RangeProductCategoryDto
-            {
-                Id = productCategory.Id,
-                Name = productCategory.Name,
-            })
-            .Skip(countSkip)
-            .Take(countTake)
-            .AsNoTracking()
-            .ToListAsync(cancellationToken);
+    public Task<List<RangeProductCategoryDto>> GetRangeAsync(int countSkip, int countTake, CancellationToken cancellationToken)
+    {
+        var rangeProductCategories = context.ProductCategories
+                                                .Select(productCategory => new RangeProductCategoryDto
+                                                {
+                                                    Id = productCategory.Id,
+                                                    Name = productCategory.Name,
+                                                })
+                                                .Page(countSkip, countTake)
+                                                .AsNoTracking()
+                                                .ToListAsync(cancellationToken);
 
-    public async Task<DetailsProductCategoryDto> GetDetailsAsync(int id, CancellationToken cancellationToken) =>
-        await context.ProductCategories
-                    .Select(productCategory => new DetailsProductCategoryDto
-                    { 
-                        Id = productCategory.Id,
-                        Name = productCategory.Name,
-                        Description = productCategory.Description
-                    })
-                    .AsNoTracking()
-                    .SingleOrDefaultAsync(
-                            productCategory => productCategory.Id == id,
-                            cancellationToken)
+        return rangeProductCategories;
+    }
+
+    public async Task<DetailsProductCategoryDto> GetDetailsAsync(int id, CancellationToken cancellationToken)
+    {
+        var detailsProductCategories = await context.ProductCategories
+                                                        .Select(productCategory => new DetailsProductCategoryDto
+                                                        {
+                                                            Id = productCategory.Id,
+                                                            Name = productCategory.Name,
+                                                            Description = productCategory.Description
+                                                        })
+                                                        .AsNoTracking()
+                                                        .SingleOrDefaultAsync(
+                                                                productCategory => productCategory.Id == id,
+                                                                cancellationToken)
+                                                                    ?? throw new NotFoundException(nameof(ProductCategory), id);
+        return detailsProductCategories;    
+    }
+
+    public async Task<List<AllProductCategoryDto>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        var productCategories = await context.ProductCategories
+                                                .Select(productCategory => new AllProductCategoryDto
+                                                {
+                                                    Id = productCategory.Id,
+                                                    Name = productCategory.Name,
+                                                })
+                                                .AsNoTracking()
+                                                .ToListAsync(cancellationToken);
+
+        return productCategories;
+    }
+
+    public async Task<ProductCategory> GetByIdAsync(int id, CancellationToken cancellationToken)
+    {
+        var productCategory = await context.ProductCategories
+                                                .SingleOrDefaultAsync(
+                                                        productCategory => productCategory.Id == id, 
+                                                        cancellationToken)
                                 ?? throw new NotFoundException(nameof(ProductCategory), id);
 
-    public async Task<List<AllProductCategoryDto>> GetAllAsync(CancellationToken cancellationToken) =>
-        await context.ProductCategories
-                    .Select(productCategory => new AllProductCategoryDto
-                    {
-                        Id = productCategory.Id,
-                        Name = productCategory.Name,
-                    })
-                    .AsNoTracking()
-                    .ToListAsync(cancellationToken);
-
-    public async Task<ProductCategory> GetByIdAsync(int id, CancellationToken cancellationToken) =>
-        await context.ProductCategories
-                        .SingleOrDefaultAsync(
-                            productCategory => productCategory.Id == id, cancellationToken)
-                                ?? throw new NotFoundException(nameof(ProductCategory), id);
+        return productCategory;
+    }
 }

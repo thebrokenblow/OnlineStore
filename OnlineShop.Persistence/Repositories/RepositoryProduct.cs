@@ -1,5 +1,4 @@
-﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using OnlineShop.Application.Common.Exceptions;
 using OnlineShop.Application.ProductCategories.Queries.GetDetailsProductCategory;
 using OnlineShop.Application.Products.Commands.ProductUpdate;
@@ -8,6 +7,7 @@ using OnlineShop.Application.Products.Queries.GetDetailsProduct;
 using OnlineShop.Application.Products.Queries.GetRangeProduct;
 using OnlineShop.Application.Repositories.Interfaces;
 using OnlineShop.Domain;
+using OnlineShop.Persistence.QueryObjects;
 
 namespace OnlineShop.Persistence.Repositories;
 
@@ -45,69 +45,78 @@ public class RepositoryProduct(OnlineStoreDbContext context, IRepositoryProductC
         await context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<List<RangeProductDto>> GetRangeAsync(int countSkip, int countTake, CancellationToken cancellationToken) =>
-        await context.Products
-                        .Select(product => new RangeProductDto
-                        {
-                            Id = product.Id,
-                            Name = product.Name,
-                        })
-                        .Skip(countSkip)
-                        .Take(countTake)
-                        .AsNoTracking()
-                        .ToListAsync(cancellationToken);
+    public async Task<List<RangeProductDto>> GetRangeAsync(int countSkip, int countTake, CancellationToken cancellationToken)
+    {
+        var products = await context.Products
+                                        .Select(product => new RangeProductDto
+                                        {
+                                            Id = product.Id,
+                                            Name = product.Name,
+                                        })
+                                        .Page(countSkip, countTake)
+                                        .AsNoTracking()
+                                        .ToListAsync(cancellationToken);
+
+        return products;
+    }
+        
 
     public async Task<DetailsProductDto> GetDetailsByIdAsync(int id, CancellationToken cancellationToken)
     {
-        var product = await context.Products
-                                   .Include(product => product.ProductCategory)
-                                   .AsNoTracking()
-                                   .SingleOrDefaultAsync(product => product.Id == id, cancellationToken) ?? throw new NotFoundException(nameof(Product), id);
-        
-        var detailsProductDto = CreateDetailsProductDto(product);
+        var detailsProductDto = await context.Products
+                                           .Include(product => product.ProductCategory)
+                                           .Select(product => new DetailsProductDto
+                                           {
+                                               Id = product.Id,
+                                               Name = product.Name,
+                                               Description = product.Description,
+                                               Price = product.Price,
+                                               ProductCategory = new DetailsProductCategoryDto
+                                               {
+                                                   Id = product.ProductCategory!.Id,
+                                                   Name = product.ProductCategory.Name,
+                                                   Description = product.ProductCategory.Description,
+                                               }
+                                           })
+                                           .AsNoTracking()
+                                           .SingleOrDefaultAsync(product => product.Id == id, 
+                                                    cancellationToken) 
+                                           ?? throw new NotFoundException(nameof(Product), id);
 
         return detailsProductDto;
     }
 
 
-    private async Task<Product> GetByIdTrackingAsync(int id, CancellationToken cancellationToken) =>
-        await context.Products.SingleOrDefaultAsync(
-                product => product.Id == id, cancellationToken)
-                    ?? throw new NotFoundException(nameof(ProductCategory), id);
-
-    public async Task<Product> GetByIdAsync(int id, CancellationToken cancellationToken = default) =>
-        await context.Products.SingleOrDefaultAsync(
-                    product => product.Id == id, cancellationToken)
-                        ?? throw new NotFoundException(nameof(ProductCategory), id);
-
-    public async Task<List<AllProductDto>> GetAllAsync(CancellationToken cancellationToken) =>
-         await context.Products
-                        .Select(product => new AllProductDto
-                        {
-                            Id = product.Id,
-                            Name = product.Name,
-                            Price = product.Price,
-                        })
-                        .ToListAsync(cancellationToken);
-
-    private static DetailsProductDto CreateDetailsProductDto(Product product)
+    private async Task<Product> GetByIdTrackingAsync(int id, CancellationToken cancellationToken)
     {
-        var productCategory = new DetailsProductCategoryDto
-        {
-            Id = product.ProductCategory!.Id,
-            Name = product.ProductCategory.Name,
-            Description = product.ProductCategory.Description,
-        };
+        var product = await context.Products.SingleOrDefaultAsync(
+                                                product => product.Id == id, cancellationToken)
+                                                    ?? throw new NotFoundException(nameof(ProductCategory), id);
 
-        var detailsProductDto = new DetailsProductDto
-        {
-            Id = product.Id,
-            Name = product.Name,
-            Description = product.Description,
-            Price = product.Price,
-            ProductCategory = productCategory,
-        };
+        return product;
+    }
 
-        return detailsProductDto;
+
+    public async Task<Product> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    {
+        var product = await context.Products.SingleOrDefaultAsync(
+                                                product => product.Id == id, cancellationToken)
+                                                    ?? throw new NotFoundException(nameof(ProductCategory), id);
+
+        return product;
+    }
+
+    public async Task<List<AllProductDto>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        var products = await context.Products
+                                        .Select(product => new AllProductDto
+                                        {
+                                            Id = product.Id,
+                                            Name = product.Name,
+                                            Price = product.Price,
+                                        })
+                                        .ToListAsync(cancellationToken);
+
+        return products;
     }
 }

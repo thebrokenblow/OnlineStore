@@ -7,7 +7,7 @@ using Reqnroll;
 namespace OnlineStore.IntegrationTests.Steps;
 
 [Binding]
-public class ProductStepDefinitions(TestServerFixture fixture, ScenarioContext scenarioContext)
+public class ProductStepDefinitions(TestServerFixture fixture)
 {
     private readonly ProductApiTestDriver productApi = new(fixture);
     private readonly ProductCategoryApiTestDriver productCategoryApi = new(fixture);
@@ -16,9 +16,9 @@ public class ProductStepDefinitions(TestServerFixture fixture, ScenarioContext s
 
 
     [Given("we want to add several products, but to add products we have to add categories:")]
-    public async Task GivenWeWantToAddProductsButToAddProductsWeHaveToAddCategories(DataTable productCategorisTable)
+    public async Task GivenWeWantToAddProductsButToAddProductsWeHaveToAddCategories(DataTable productCategoriesTable)
     {
-        var productCategories = productCategorisTable.CreateSet<TestProductCategoryData>().ToList();
+        var productCategories = productCategoriesTable.CreateSet<TestProductCategoryData>().ToList();
 
         foreach (var productCategory in productCategories)
         {

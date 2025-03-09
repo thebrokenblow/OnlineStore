@@ -119,34 +119,34 @@ namespace OnlineStore.IntegrationTests.Features
 #line 3
     await this.FeatureBackgroundAsync();
 #line hidden
-                global::Reqnroll.Table table4 = new global::Reqnroll.Table(new string[] {
+                global::Reqnroll.Table table8 = new global::Reqnroll.Table(new string[] {
                             "Name",
                             "Description"});
-                table4.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "Electronics",
                             "Devices like smartphones, laptops, and smart home gadgets that enhance connectivi" +
                                 "ty and entertainment."});
-                table4.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "Home Appliances",
                             "Essential household items such as refrigerators, ovens, and washing machines that" +
                                 " improve daily tasks."});
-                table4.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "Health and Beauty",
                             "Personal care products, including cosmetics and skincare, that promote well-being" +
                                 " and appearance."});
 #line 6
-        await testRunner.WhenAsync("we add product categories:", ((string)(null)), table4, "When ");
+        await testRunner.WhenAsync("we add product categories:", ((string)(null)), table8, "When ");
 #line hidden
-                global::Reqnroll.Table table5 = new global::Reqnroll.Table(new string[] {
+                global::Reqnroll.Table table9 = new global::Reqnroll.Table(new string[] {
                             "Name"});
-                table5.AddRow(new string[] {
+                table9.AddRow(new string[] {
                             "Electronics"});
-                table5.AddRow(new string[] {
+                table9.AddRow(new string[] {
                             "Home Appliances"});
-                table5.AddRow(new string[] {
+                table9.AddRow(new string[] {
                             "Health and Beauty"});
 #line 12
-        await testRunner.ThenAsync("we get list of product categories:", ((string)(null)), table5, "Then ");
+        await testRunner.ThenAsync("we get list of product categories:", ((string)(null)), table9, "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();
@@ -173,43 +173,43 @@ namespace OnlineStore.IntegrationTests.Features
 #line 3
     await this.FeatureBackgroundAsync();
 #line hidden
-                global::Reqnroll.Table table6 = new global::Reqnroll.Table(new string[] {
+                global::Reqnroll.Table table10 = new global::Reqnroll.Table(new string[] {
                             "Name",
                             "Description"});
-                table6.AddRow(new string[] {
+                table10.AddRow(new string[] {
                             "Fitness Equipment",
                             "Equipment such as treadmills, weights, and yoga mats designed to support physical" +
                                 " exercise and wellness."});
-                table6.AddRow(new string[] {
+                table10.AddRow(new string[] {
                             "Office Supplies",
                             "Items like pens, notebooks, and printers that facilitate productivity and organiz" +
                                 "ation in workspaces."});
 #line 20
-        await testRunner.GivenAsync("we add product categories:", ((string)(null)), table6, "Given ");
+        await testRunner.GivenAsync("we add product categories:", ((string)(null)), table10, "Given ");
 #line hidden
-                global::Reqnroll.Table table7 = new global::Reqnroll.Table(new string[] {
+                global::Reqnroll.Table table11 = new global::Reqnroll.Table(new string[] {
                             "Name",
                             "Description"});
-                table7.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "Gardening Tools",
                             "Equipment such as shovels, rakes, and pruners used for planting, maintaining, and" +
                                 " landscaping gardens."});
 #line 25
-        await testRunner.WhenAsync("we update product categories:", ((string)(null)), table7, "When ");
+        await testRunner.WhenAsync("we update product categories:", ((string)(null)), table11, "When ");
 #line hidden
-                global::Reqnroll.Table table8 = new global::Reqnroll.Table(new string[] {
+                global::Reqnroll.Table table12 = new global::Reqnroll.Table(new string[] {
                             "Name",
                             "Description"});
-                table8.AddRow(new string[] {
+                table12.AddRow(new string[] {
                             "Gardening Tools",
                             "Equipment such as shovels, rakes, and pruners used for planting, maintaining, and" +
                                 " landscaping gardens."});
-                table8.AddRow(new string[] {
+                table12.AddRow(new string[] {
                             "Office Supplies",
                             "Items like pens, notebooks, and printers that facilitate productivity and organiz" +
                                 "ation in workspaces."});
 #line 29
-        await testRunner.ThenAsync("we get list of product categories:", ((string)(null)), table8, "Then ");
+        await testRunner.ThenAsync("we get list of product categories:", ((string)(null)), table12, "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();
@@ -236,40 +236,40 @@ namespace OnlineStore.IntegrationTests.Features
 #line 3
     await this.FeatureBackgroundAsync();
 #line hidden
-                global::Reqnroll.Table table9 = new global::Reqnroll.Table(new string[] {
+                global::Reqnroll.Table table13 = new global::Reqnroll.Table(new string[] {
                             "Name",
                             "Description"});
-                table9.AddRow(new string[] {
+                table13.AddRow(new string[] {
                             "Electronics",
                             "Devices like smartphones, laptops, and smart home gadgets that enhance connectivi" +
                                 "ty and entertainment."});
-                table9.AddRow(new string[] {
+                table13.AddRow(new string[] {
                             "Home Appliances",
                             "Essential household items such as refrigerators, ovens, and washing machines that" +
                                 " improve daily tasks."});
-                table9.AddRow(new string[] {
+                table13.AddRow(new string[] {
                             "Health and Beauty",
                             "Personal care products, including cosmetics and skincare, that promote well-being" +
                                 " and appearance."});
 #line 35
-        await testRunner.GivenAsync("we add product categories:", ((string)(null)), table9, "Given ");
+        await testRunner.GivenAsync("we add product categories:", ((string)(null)), table13, "Given ");
 #line hidden
 #line 41
         await testRunner.WhenAsync("we delete product category with name: \"Electronics\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
 #line hidden
-                global::Reqnroll.Table table10 = new global::Reqnroll.Table(new string[] {
+                global::Reqnroll.Table table14 = new global::Reqnroll.Table(new string[] {
                             "Name",
                             "Description"});
-                table10.AddRow(new string[] {
+                table14.AddRow(new string[] {
                             "Home Appliances",
                             "Essential household items such as refrigerators, ovens, and washing machines that" +
                                 " improve daily tasks."});
-                table10.AddRow(new string[] {
+                table14.AddRow(new string[] {
                             "Health and Beauty",
                             "Personal care products, including cosmetics and skincare, that promote well-being" +
                                 " and appearance."});
 #line 43
-        await testRunner.ThenAsync("we get list of product categories:", ((string)(null)), table10, "Then ");
+        await testRunner.ThenAsync("we get list of product categories:", ((string)(null)), table14, "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();
@@ -298,15 +298,15 @@ namespace OnlineStore.IntegrationTests.Features
 #line 3
     await this.FeatureBackgroundAsync();
 #line hidden
-                global::Reqnroll.Table table11 = new global::Reqnroll.Table(new string[] {
+                global::Reqnroll.Table table15 = new global::Reqnroll.Table(new string[] {
                             "Name",
                             "Description"});
-                table11.AddRow(new string[] {
+                table15.AddRow(new string[] {
                             "",
                             "Devices like smartphones, laptops, and smart home gadgets that enhance connectivi" +
                                 "ty and entertainment."});
 #line 50
-        await testRunner.WhenAsync("we add product categories:", ((string)(null)), table11, "When ");
+        await testRunner.WhenAsync("we add product categories:", ((string)(null)), table15, "When ");
 #line hidden
 #line 54
         await testRunner.ThenAsync("we get a validation error", ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
