@@ -7,7 +7,7 @@ using Testcontainers.PostgreSql;
 namespace OnlineStore.IntegrationTests.Fixture;
 
 [Binding]
-public class TestServerFixtureCore : IAsyncDisposable
+public class TestServerFixtureCore
 {
     private static readonly ConcurrentDictionary<int, TestServerFixtureCore> InstanceMap = [];
 
@@ -33,7 +33,7 @@ public class TestServerFixtureCore : IAsyncDisposable
         if (!_initialized)
         {
             await _container.StartAsync();
-            CustomWebApplicationFactory<Startup> factory = new(AttachDbContext, _container.GetConnectionString());
+            var factory = new CustomWebApplicationFactory<Startup>(AttachDbContext, _container.GetConnectionString());
             _httpClient = factory.CreateClient();
             _initialized = true;
         }

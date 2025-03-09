@@ -1,12 +1,12 @@
 ﻿using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Microsoft.Extensions.Options;
-using OnlineShop.Application;
 using OnlineShop.Persistence;
 using OnlineShop.WebApi.Configurations;
 using OnlineShop.WebApi.DocumentFilters;
 using OnlineShop.WebApi.Middleware;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using OnlineShop.Application;
 
 namespace OnlineShop.WebApi;
 
@@ -47,7 +47,7 @@ public partial class Startup(IConfiguration configuration, IWebHostEnvironment e
 
     }
 
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
+    public void Configure(IApplicationBuilder app, IApiVersionDescriptionProvider provider)
     {
         if (env.IsDevelopment())
         {

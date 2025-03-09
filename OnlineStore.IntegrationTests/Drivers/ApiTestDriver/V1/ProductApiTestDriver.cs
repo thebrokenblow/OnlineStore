@@ -6,68 +6,68 @@ using OnlineShop.WebApi.Model.Product;
 using OnlineStore.IntegrationTests.Fixture;
 using System.Net.Http.Json;
 
-namespace OnlineStore.IntegrationTests.Drivers.ApiTestDriver;
+namespace OnlineStore.IntegrationTests.Drivers.ApiTestDriver.V1;
 
 public class ProductApiTestDriver(ITestServerFixture fixture)
 {
     private const string nameController = "products";
     private readonly HttpClient _httpClient = fixture.HttpClient;
+    private const string version = "v1";
 
-    public async Task<List<AllProductDto>> GetAll()
+    public async Task<List<AllProductDto>> GetAllAsync()
     {
-        var response = await _httpClient.GetAsync($"/api/{nameController}");
-        await EnsureSuccessStatusCode(response);
+        var response = await _httpClient.GetAsync($"/api/{version}/{nameController}");
+        await EnsureSuccessStatusCodeAsync(response);
 
         string content = await response.Content.ReadAsStringAsync();
         return JsonConvert.DeserializeObject<List<AllProductDto>>(content)
                ?? throw new ArgumentException($"Unexpected JSON response: {content}");
     }
 
-    public async Task<List<RangeProductDto>> GetRange(int countSkip, int countTake)
+    public async Task<List<RangeProductDto>> GetRangeAsync(int countSkip, int countTake)
     {
-        var response = await _httpClient.GetAsync($"/api/{nameController}/{countSkip}/{countTake}");
-        await EnsureSuccessStatusCode(response);
+        var response = await _httpClient.GetAsync($"/api/{version}/{nameController}/{countSkip}/{countTake}");
+        await EnsureSuccessStatusCodeAsync(response);
 
         string content = await response.Content.ReadAsStringAsync();
         return JsonConvert.DeserializeObject<List<RangeProductDto>>(content)
                ?? throw new ArgumentException($"Unexpected JSON response: {content}");
     }
 
-    public async Task<DetailsProductDto> GetDetails(int id)
+    public async Task<DetailsProductDto> GetDetailsAsync(int id)
     {
-        var response = await _httpClient.GetAsync($"/api/{nameController}/{id}");
-        await EnsureSuccessStatusCode(response);
+        var response = await _httpClient.GetAsync($"/api/{version}/{nameController}/{id}");
+        await EnsureSuccessStatusCodeAsync(response);
 
         string content = await response.Content.ReadAsStringAsync();
         return JsonConvert.DeserializeObject<DetailsProductDto>(content)
                ?? throw new ArgumentException($"Unexpected JSON response: {content}");
     }
 
-    public async Task<int> AddProduct(CreateProductModel createProductModel)
+    public async Task<int> AddAsync(CreateProductModel createProductModel)
     {
-        var response = await _httpClient.PostAsJsonAsync($"/api/{nameController}", createProductModel);
-        await EnsureSuccessStatusCode(response);
+        var response = await _httpClient.PostAsJsonAsync($"/api/{version}/{nameController}", createProductModel);
+        await EnsureSuccessStatusCodeAsync(response);
 
         string content = await response.Content.ReadAsStringAsync();
-        var result = JsonConvert.DeserializeObject<AddProductResult>(content)
-                                  ?? throw new FormatException($"Unexpected response: {content}");
+        var id = int.Parse(content);
 
-        return result.Id;
+        return id;
     }
 
-    public async Task UpdateProduct(UpdateProductModel updateProductModel)
+    public async Task UpdateAsync(UpdateProductModel updateProductModel)
     {
-        var response = await _httpClient.PutAsJsonAsync($"/api/{nameController}/", updateProductModel);
-        await EnsureSuccessStatusCode(response);
+        var response = await _httpClient.PutAsJsonAsync($"/api/{version}/{nameController}/", updateProductModel);
+        await EnsureSuccessStatusCodeAsync(response);
     }
 
-    public async Task DeleteProduct(int id)
+    public async Task DeleteAsync(int id)
     {
-        var response = await _httpClient.DeleteAsync($"/api/{nameController}/{id}");
-        await EnsureSuccessStatusCode(response);
+        var response = await _httpClient.DeleteAsync($"/api/{version}/{nameController}/{id}");
+        await EnsureSuccessStatusCodeAsync(response);
     }
 
-    private static async Task EnsureSuccessStatusCode(HttpResponseMessage response)
+    private static async Task EnsureSuccessStatusCodeAsync(HttpResponseMessage response)
     {
         if (!response.IsSuccessStatusCode)
         {

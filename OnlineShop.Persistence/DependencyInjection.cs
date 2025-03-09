@@ -16,20 +16,24 @@ public static class DependencyInjection
         IConfiguration configuration,
         string environment)
     {
-        if (environment == "Development")
-        {
-            var connectionString = configuration.GetConnectionString(developmentConnectionString);
+        string? connectionString = null;
 
-            services.AddDbContext<OnlineStoreDbContext>(options =>
-                options.UseNpgsql(connectionString));
-        }
-        else if (environment == "Testing")
+        if (environment == "Testing")
         {
-            var connectionString = configuration.GetConnectionString(testingConnectionString);
-
-            services.AddDbContext<OnlineStoreDbContext>(options =>
-                options.UseNpgsql(connectionString));
+            connectionString = configuration.GetConnectionString(testingConnectionString);
         }
+        else if (environment == "Development")
+        {
+            connectionString = configuration.GetConnectionString(developmentConnectionString);
+        }
+
+        if (connectionString == null)
+        {
+            throw new InvalidOperationException("Connection string is not initialized");
+        }
+
+        services.AddDbContext<OnlineStoreDbContext>(options =>
+                options.UseNpgsql(connectionString));
 
         services.AddScoped<IRepositoryProduct, RepositoryProduct>();
         services.AddScoped<IRepositoryProductCategory, RepositoryProductCategory>();

@@ -1,18 +1,14 @@
 ﻿using Reqnroll.Assist.Attributes;
 
-namespace OnlineStore.IntegrationTests.Drivers;
+namespace OnlineStore.IntegrationTests.Drivers.TestData;
 
 public class TestProductData(
-    int id,
     string name,
     string description,
     decimal price,
-    int idProductCategory
+    string categoryName
 )
 {
-    [TableAliases("Id")]
-    public int Id { get; set; } = id;
-
     [TableAliases("Name")]
     public required string Name { get; set; } = name;
 
@@ -22,6 +18,6 @@ public class TestProductData(
     [TableAliases("Price")]
     public required decimal Price { get; set; } = price;
 
-    [TableAliases("IdProductCategory")]
-    public required int IdProductCategory { get; set; } = idProductCategory;
+    [TableAliases("CategoryName")]
+    public required string CategoryName { get; set; } = categoryName;
 }

@@ -7,7 +7,6 @@ using OnlineShop.Application.ProductCategories.Commands.ProductCategoryUpdate;
 using OnlineShop.Application.ProductCategories.Queries.GetAllProductCategory;
 using OnlineShop.Application.ProductCategories.Queries.GetDetailsProductCategory;
 using OnlineShop.Application.ProductCategories.Queries.GetRangeProductCategory;
-using OnlineShop.Domain;
 using OnlineShop.WebApi.Model.ProductCategory;
 
 namespace OnlineShop.WebApi.Controllers.V1;
@@ -16,7 +15,7 @@ namespace OnlineShop.WebApi.Controllers.V1;
 [ApiVersion("1.0")]
 [Produces("application/json")]
 [ControllerName("productCategories")]
-[Route("api/[controller]/[action]")]
+[Route("api/[controller]")]
 [Route("api/v{version:apiVersion}/[controller]")]
 public class ProductCategoryController(IMediator mediator) : ControllerBase
 {
@@ -25,7 +24,7 @@ public class ProductCategoryController(IMediator mediator) : ControllerBase
     /// </summary>
     /// <remarks>
     /// Sample request:
-    /// GET /api/products
+    /// GET /api/productCategories
     /// </remarks>
     /// <returns>Returns list of allProductDto</returns>
     /// <response code="200">Success</response>

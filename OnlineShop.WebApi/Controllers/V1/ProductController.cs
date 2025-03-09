@@ -14,7 +14,7 @@ namespace OnlineShop.WebApi.Controllers.V1;
 [ApiController]
 [ApiVersion("1.0")]
 [ControllerName("products")]
-[Route("api/[controller]/[action]")]
+[Route("api/[controller]")]
 [Route("api/v{version:apiVersion}/[controller]")]
 public class ProductController(IMediator mediator) : ControllerBase
 {

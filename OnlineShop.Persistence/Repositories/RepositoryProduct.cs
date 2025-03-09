@@ -86,6 +86,7 @@ public class RepositoryProduct(OnlineStoreDbContext context, IRepositoryProductC
                         {
                             Id = product.Id,
                             Name = product.Name,
+                            Price = product.Price,
                         })
                         .ToListAsync(cancellationToken);
 

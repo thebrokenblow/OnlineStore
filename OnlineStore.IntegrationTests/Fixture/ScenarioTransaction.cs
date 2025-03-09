@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Npgsql;
-
+using System;
+using System.Collections.Generic;
+using System.Linq;
 namespace OnlineStore.IntegrationTests.Fixture;
 
 public class ScenarioTransaction : IAsyncDisposable
@@ -8,17 +10,10 @@ public class ScenarioTransaction : IAsyncDisposable
     private readonly NpgsqlConnection _connection;
     private readonly NpgsqlTransaction _transaction;
 
-    private ScenarioTransaction(NpgsqlConnection connection, NpgsqlTransaction transaction)
-    {
-        _connection = connection;
-        _transaction = transaction;
-    }
-
     public static async Task<ScenarioTransaction> Create(string dbConnectionString)
     {
         NpgsqlConnection connection = new(dbConnectionString);
         await connection.OpenAsync();
-
         try
         {
             NpgsqlTransaction transaction = await connection.BeginTransactionAsync();
@@ -41,5 +36,11 @@ public class ScenarioTransaction : IAsyncDisposable
     {
         await _transaction.RollbackAsync();
         await _connection.CloseAsync();
+    }
+
+    private ScenarioTransaction(NpgsqlConnection connection, NpgsqlTransaction transaction)
+    {
+        _connection = connection;
+        _transaction = transaction;
     }
 }

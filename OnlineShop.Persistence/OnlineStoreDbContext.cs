@@ -14,4 +14,10 @@ public class OnlineStoreDbContext(DbContextOptions<OnlineStoreDbContext> options
         modelBuilder.ApplyAllConfigurations();
         base.OnModelCreating(modelBuilder);
     }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+        optionsBuilder.UseSnakeCaseNamingConvention();
+    }
 }

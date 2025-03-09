@@ -1,8 +1,6 @@
-﻿using System.Reflection;
-using FluentValidation;
-using MediatR;
+﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using OnlineShop.Application.Common.Behaviors;
+using System.Reflection;
 
 namespace OnlineShop.Application;
 
@@ -12,6 +10,7 @@ public static class DependencyInjection
     {
         services.AddMediatR(configuration => 
             configuration.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
+
         services.AddValidatorsFromAssemblies([Assembly.GetExecutingAssembly()]);
 
         return services;
